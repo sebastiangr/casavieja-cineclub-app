@@ -1,47 +1,38 @@
-import { PrismaClient } from '@prisma/client';
+import type { RequestHandler } from './$types';
+import { prisma } from '$lib/prisma';
 import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
-const prisma = new PrismaClient();
+import { generateToken } from '$lib/jwt';
 
-export interface LoginRequestBody {
-  email: string;
-  password: string;
-  rememberMe: boolean;
-}
 
-/** @type {import('./$types').RequestHandler} */
-export async function POST({ request }: { request: Request }): Promise<Response> {
-  try {
-    const data: LoginRequestBody = await request.json();
-    const { email, password, rememberMe } = data;
+export const POST: RequestHandler = async ({ request }) => {
+	try {
+		const { email, password } = await request.json();
 
     // Buscar usuario
-    const user = await prisma.user.findUnique({
-      where: { email },
+		const user = await prisma.user.findUnique({ 
+      where: { email } 
     });
+    // Verificar usuario y contraseña
+		if (!user || !(await bcrypt.compare(password, user.password))) {
+			return new Response(JSON.stringify({ error: 'Credenciales incorrectas' }), { status: 401 });
+		}
 
-    if (!user) {
-      return new Response(JSON.stringify({ error: 'Usuario no encontrado' }), { status: 404 });
-    }
-
-    // Verificar contraseña
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) {
-      return new Response(JSON.stringify({ error: 'Contraseña incorrecta' }), { status: 401 });
-    }
+    // Generar token JWT
+		const token = generateToken({ userId: user.id, username: user.username });
 
     // Crear sesión (cookie segura)
-    const sessionCookie = serialize('session', JSON.stringify({ userId: user.id, username: user.username }), {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      path: '/',
-      maxAge: rememberMe ? 60 * 60 * 24 * 7 : 60 * 60 * 2, // 7 días si se marcó "Recordar sesión"
-    });
+		const cookie = serialize('session', token, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'strict',
+			path: '/',
+			maxAge: 60 * 60 * 2 // 2 horas
+		});
 
-    return new Response(JSON.stringify({ message: 'Login exitoso' }), {
-      status: 200,
-      headers: { 'Set-Cookie': sessionCookie },
+    return new Response(JSON.stringify({ token }), { 
+      status: 200, 
+      headers: { 'Set-Cookie': cookie } 
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Error en el servidor' }), { status: 500 });

@@ -1,7 +1,7 @@
+import type { RequestHandler } from './$types';
 import { serialize } from 'cookie';
 
-/** @type {import('./$types').RequestHandler} */
-export async function POST() {
+export const POST: RequestHandler = async () => {
   // Eliminar la cookie de sesión
   const cookie = serialize('session', '', {
     httpOnly: true,
