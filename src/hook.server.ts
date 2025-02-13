@@ -21,6 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
+  // Redirigir si intenta acceder a `/dashboard` sin estar autenticado
   if (!event.locals.user && event.url.pathname.startsWith('/dashboard')) {
 		return new Response(null, { status: 302, headers: { Location: '/' } });
 	}

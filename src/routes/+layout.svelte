@@ -1,6 +1,11 @@
 <script lang="ts">
-	import '../app.postcss';
+  import '../app.postcss';
   import { LightSwitch } from '@skeletonlabs/skeleton';
+	import { initializeStores } from '@skeletonlabs/skeleton';
+
+	// Inicializar stores globales de Skeleton UI
+	initializeStores();
+
 	let { children } = $props();
 </script>
 

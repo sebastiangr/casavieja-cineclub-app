@@ -14,6 +14,7 @@ import bcrypt from 'bcryptjs';
 /** @type {import('./$types').RequestHandler} */
 export const POST: RequestHandler = async ({ request }) => {
   try {
+    // TODO: Añadir console.logs para validar que los datos se están recibiendo correctamente
     const { email, username, password } = await request.json();
 
     // Validaciones básicas
