@@ -31,7 +31,7 @@
 
 <div class="flex flex-col items-center justify-center min-h-screen">
 	{#if user}
-		<h1 class="text-2xl font-bold">Bienvenido, {user.username}!</h1>
+		<h1 class="text-2xl font-bold">¡Bienvenido, {user.username}!</h1>
 		<button on:click={logout} class="btn-primary">Cerrar sesión</button>
 	{:else}
 		<p>Cargando...</p>

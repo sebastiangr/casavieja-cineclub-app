@@ -7,16 +7,19 @@
 	let password = '';
 	let confirmPassword = '';
 	let mensaje: string | null = null;
+	let loading = false; // Estado de loading
 
 	// Manejo de toasts
 	const toastStore = getToastStore();
 
 	async function signup() {
 		mensaje = null;
+		loading = true; // Activar loading
 
 		if (password !== confirmPassword) {
 			mensaje = 'Las contraseñas no coinciden';
 			toastStore.trigger({ message: 'Las contraseñas no coinciden', background: 'red' });
+			loading = false; // Desactivar loading
 			return;
 		}
 
@@ -30,25 +33,32 @@
 
 		if (res.ok) {
 			toastStore.trigger({ message: 'Registro exitoso, inicia sesión', background: 'green' });
-			goto('/');
+			email = ''; // Limpiar campos
+			username = '';
+			password = '';
+			confirmPassword = '';
+			goto('/?registered=true'); // Redirigir a la página principal con parámetro
 		} else {
 			mensaje = data.error;
 			toastStore.trigger({ message: data.error, background: 'red' });
 		}
+		loading = false; // Desactivar loading
 	}
 </script>
 
-<!-- TODO: Añadir validaciones de email y username (no vacíos, username mayor a 4 caracteres) -->
-<!-- TODO: Añadir validaciones de contraseña (mínimo 6 caracteres, al menos una letra y un número) -->
-<!-- TODO: Añadir validaciones de confirmar contraseña (igual a contraseña) -->
-<!-- TODO: Borrar formulario al enviar, deshabilitar botón y mostrar spinner -->
 <div class="flex flex-col items-center justify-center min-h-screen">
 	<h1 class="text-2xl font-bold">Registro</h1>
-	<input bind:value={email} type="email" placeholder="Correo" class="input" />
-	<input bind:value={username} type="text" placeholder="Usuario" class="input" />
-	<input bind:value={password} type="password" placeholder="Contraseña" class="input" />
-	<input bind:value={confirmPassword} type="password" placeholder="Confirmar contraseña" class="input" />
-	<button on:click={signup} class="btn-primary">Crear cuenta</button>
+	<input bind:value={email} type="email" placeholder="Correo" class="input" disabled={loading}/>
+	<input bind:value={username} type="text" placeholder="Usuario" class="input" disabled={loading}/>
+	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading}/>
+	<input bind:value={confirmPassword} type="password" placeholder="Confirmar contraseña" class="input" disabled={loading}/>
+	<button on:click={signup} class="btn-primary" disabled={loading}>
+		{#if loading}
+			<span class="loader">Creando usuario...</span> <!-- Spinner -->
+		{:else}
+			Crear cuenta
+		{/if}
+	</button>
 	{#if mensaje}
 		<p class="text-red-500">{mensaje}</p>
 	{/if}

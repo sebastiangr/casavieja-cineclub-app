@@ -47,7 +47,7 @@ export const POST: RequestHandler = async ({ request }) => {
     });
   } catch (error) {
     console.log('Error en el servidor: ', error);
-    return new Response(JSON.stringify({ error: 'Error en el servidor' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Error en el servidor' + error }), { status: 500 });
   }
 }
 
