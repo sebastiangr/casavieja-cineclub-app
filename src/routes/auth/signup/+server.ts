@@ -10,6 +10,7 @@ import type { RequestHandler } from './$types';
 // en su lugar, deberíamos acceder a ella como prisma.findUnique({ model: 'User', ... })
 import { prisma } from '$lib/prisma';
 import bcrypt from 'bcryptjs';
+import { signupSchema } from '$lib/validations';
 
 /** @type {import('./$types').RequestHandler} */
 export const POST: RequestHandler = async ({ request }) => {
@@ -17,10 +18,13 @@ export const POST: RequestHandler = async ({ request }) => {
     // TODO: Añadir console.logs para validar que los datos se están recibiendo correctamente
     const { email, username, password } = await request.json();
 
+    // Validar los datos usando Zod
+    signupSchema.parse({ email, username, password });
+
     // Validaciones básicas
-    if (!email || !username || !password) {
-			return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), { status: 400 });
-		}
+    // if (!email || !username || !password) {
+		// 	return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), { status: 400 });
+		// }
 
     // Verificar si el username ya existe
     const existingUsername = await prisma.user.findUnique({ 

@@ -49,6 +49,8 @@
 		"bcryptjs": "^2.4.3",
 		"cookie": "^1.0.2",
 		"dotenv": "^16.4.7",
-		"jsonwebtoken": "^9.0.2"
+		"jsonwebtoken": "^9.0.2",
+		"sveltekit-superforms": "^2.23.1",
+		"zod": "^3.24.2"
 	}
 }
