@@ -13,3 +13,30 @@
 .btn-primary {
 	@apply w-80 p-2 bg-blue-500 text-white rounded-lg my-2 hover:bg-blue-600;
 }
+
+.btn-signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader {
+  border: 2px solid transparent;
+  border-top-color: rgb(255, 255, 255); /* Color del spinner */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+  margin-left: -30px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

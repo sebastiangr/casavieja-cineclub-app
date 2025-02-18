@@ -22,13 +22,21 @@ export const POST: RequestHandler = async ({ request }) => {
 			return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), { status: 400 });
 		}
 
-    // Verificar si el usuario ya existe
-    const existingUser = await prisma.user.findUnique({ 
-      where: { email } 
+    // Verificar si el username ya existe
+    const existingUsername = await prisma.user.findUnique({ 
+      where: { username } 
     });
-		if (existingUser) {
-			return new Response(JSON.stringify({ error: 'El usuario ya existe' }), { status: 400 });
+		if (existingUsername) {
+			return new Response(JSON.stringify({ error: 'El nombre de usuario ya está en uso' }), { status: 400 });
 		}
+
+    // Verificar si el email ya existe
+    const existingEmail = await prisma.user.findUnique({
+      where: { email }
+    });
+    if (existingEmail) {
+      return new Response(JSON.stringify({ error: 'El email ya está registrado' }), { status: 400 });
+    }
 
     // Encriptar contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,6 +48,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
     return new Response(JSON.stringify({ message: 'Usuario registrado con éxito' }), { status: 201 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Error en el servidor' }), { status: 500 });
+    return new Response(JSON.stringify({ error: 'Error en el servidor' + error }), { status: 500 });
   }
 }

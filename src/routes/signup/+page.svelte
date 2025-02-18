@@ -52,9 +52,9 @@
 	<input bind:value={username} type="text" placeholder="Usuario" class="input" disabled={loading}/>
 	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading}/>
 	<input bind:value={confirmPassword} type="password" placeholder="Confirmar contraseña" class="input" disabled={loading}/>
-	<button on:click={signup} class="btn-primary" disabled={loading}>
+	<button on:click={signup} class="btn-primary btn-signup" style="pointer-events: {loading ? 'none' : 'auto'}" disabled={loading}>
 		{#if loading}
-			<span class="loader">Creando usuario...</span> <!-- Spinner -->
+			<span class="loader"></span>Creando usuario... <!-- Spinner -->
 		{:else}
 			Crear cuenta
 		{/if}

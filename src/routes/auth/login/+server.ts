@@ -6,25 +6,24 @@ import { generateToken } from '$lib/jwt';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
-		const { email, password } = await request.json();
-		console.log('Email y password: ', email, password);
+		const { username, password } = await request.json();
+		console.log('Username y password: ', username, password);
 
-    // TODO: Cambiar email por username
-    // Buscar usuario
+    // Buscar usuario por username
 		const user = await prisma.user.findUnique({ 
-      where: { email } 
+      where: { username } 
     });
 		console.log('Usuario encontrado: ', user);
 
     // Verificar usuario y contraseña
 		if (!user) {
 			console.log('Usuario no existe');
-			return new Response(JSON.stringify({ error: 'El usuario no existe' }), { status: 401 });
+			return new Response(JSON.stringify({ error: 'El usuario no existe.' }), { status: 401 });
 		}
 
 		if (!(await bcrypt.compare(password, user.password))) {
 			console.log('Contraseña incorrecta');
-			return new Response(JSON.stringify({ error: 'La contraseña a es incorrecta' }), { status: 401 });
+			return new Response(JSON.stringify({ error: 'La contraseña es incorrecta.' }), { status: 401 });
 		}
 
     // Generar token JWT

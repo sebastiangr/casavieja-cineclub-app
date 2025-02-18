@@ -16,7 +16,3 @@
 <div class="flex items-center justify-center min-h-screen">
 	{@render children()}
 </div>
-
-<style>
-
-</style>
