@@ -7,14 +7,29 @@
 	let password = '';
 	let mensaje: string | null = null;
 	let mensajeExito: string | null = null; // Mensaje de éxito
-  let loading = false; // Estado de loading
+	let formValid = false; // Estado de validación del formulario
+	let loading = false; // Estado de loading
+
+	// Validar que los campos no estén vacíos
+	function validateForm() {
+		if (!username.trim() || !password.trim()) {
+			mensaje = 'Por favor, complete todos los campos';
+			formValid = false;
+			return false;
+		}
+		mensaje = null;
+		formValid = true;
+		return true;
+	}
 
 	// Manejo de toasts
 	const toastStore = getToastStore();
 
 	async function login() {
+		if (!validateForm()) return;
+		
 		mensaje = null;
-    loading = true; // Activar loading
+		loading = true; // Activar loading
 
 		const res = await fetch('/auth/login', {
 			method: 'POST',
@@ -47,15 +62,13 @@
 	});
 </script>
 
-<!-- TODO: Agregar validación de campos no vacíos -->
-<!-- TODO: Deshabilitar botón al enviar -->
 <div class="flex flex-col items-center justify-center min-h-screen">
 	<h1 class="text-2xl font-bold">Iniciar sesión</h1>
 	{#if mensajeExito}
 		<p class="text-green-500">{mensajeExito}</p> <!-- Mostrar mensaje de éxito -->
 	{/if}
-	<input bind:value={username} type="text" placeholder="Nombre de usuario" class="input" disabled={loading}/>
-	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading}/>
+	<input bind:value={username} type="text" placeholder="Nombre de usuario" class="input" disabled={loading} />
+	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading} />
 	<button on:click={login} class="btn-login btn-primary" style="pointer-events: {loading ? 'none' : 'auto'}" disabled={loading}>
     {#if loading}
       <span class="loader"></span>Verificando... <!-- Spinner -->
