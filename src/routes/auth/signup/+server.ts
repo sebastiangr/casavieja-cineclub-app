@@ -11,8 +11,9 @@ import type { RequestHandler } from './$types';
 import { prisma } from '$lib/prisma';
 import bcrypt from 'bcryptjs';
 import { signupSchema } from '$lib/validations';
+import { json } from '@sveltejs/kit';
 
-/** @type {import('./$types').RequestHandler} */
+/** @type {RequestHandler} */
 export const POST: RequestHandler = async ({ request }) => {
   try {
     // TODO: Añadir console.logs para validar que los datos se están recibiendo correctamente
@@ -20,11 +21,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Validar los datos usando Zod
     signupSchema.parse({ email, username, password });
-
-    // Validaciones básicas
-    // if (!email || !username || !password) {
-		// 	return new Response(JSON.stringify({ error: 'Todos los campos son obligatorios' }), { status: 400 });
-		// }
 
     // Verificar si el username ya existe
     const existingUsername = await prisma.user.findUnique({ 
@@ -46,12 +42,12 @@ export const POST: RequestHandler = async ({ request }) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Crear usuario en la DB
-    const user = await prisma.user.create({
-			data: { email, username, password: hashedPassword }
-		});
+    await prisma.user.create({
+      data: { email, username, password: hashedPassword }
+    });    
 
-    return new Response(JSON.stringify({ message: 'Usuario registrado con éxito' }), { status: 201 });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: 'Error en el servidor' + error }), { status: 500 });
+    return json({ message: 'Usuario registrado con éxito' }, { status: 201 });    
+  } catch (error) {    
+    return json({ error: 'Error en el servidor' }, { status: 500 });
   }
 }

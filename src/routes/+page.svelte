@@ -3,12 +3,14 @@
 	import { onMount } from 'svelte';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 
-	let username = '';
-	let password = '';
-	let mensaje: string | null = null;
-	let mensajeExito: string | null = null; // Mensaje de éxito
-	let formValid = false; // Estado de validación del formulario
-	let loading = false; // Estado de loading
+	let username = $state('');
+	let password = $state('');
+	// let mensaje: string | null = null;
+	// let mensajeExito: string | null = null;
+  let mensaje = $state<string | null>(null);
+  let mensajeExito = $state<string | null>(null);
+	let formValid = $state(false); // Estado de validación del formulario
+	let loading = $state(false); // Estado de loading
 
 	// TODO: Borrar todos los toastStore
 	const toastStore = getToastStore();
@@ -25,6 +27,15 @@
 		return true;
 	}
 
+  /**
+   * Función para manejar el envío del formulario de login.
+   * Primero se validan los campos del formulario. Si no son válidos, se muestra un mensaje de error y se sale.
+   * Si son válidos, se hace una petición POST a /auth/login con los datos del formulario.
+   * Si la petición es exitosa (200), se guarda el token en localStorage y se redirige a /dashboard.
+   * Si la petición falla (401, 400, etc.), se muestra un mensaje de error y se sale.
+   * En caso de error en el servidor, se muestra un mensaje de error y se sale.
+   * @param {SubmitEvent} event - Evento de envío del formulario
+   */
   async function handleSubmit(event: SubmitEvent) {
     event.preventDefault(); // Prevent default form submission
     
@@ -58,36 +69,7 @@
     }
   }
 
-  // NOTE: This function worked
-	// async function login() {
-	// 	if (!validateForm()) return;
-		
-	// 	mensaje = null;
-	// 	loading = true; // Activar loading
-
-	// 	const res = await fetch('/auth/login', {
-	// 		method: 'POST',
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 		body: JSON.stringify({ username, password })
-	// 	});
-
-	// 	const data = await res.json();
-
-	// 	if (res.ok) {
-	// 		localStorage.setItem('token', data.token);
-	// 		toastStore.trigger({ message: 'Login exitoso', background: 'green' });
-	// 		goto('/dashboard');
-	// 	} else {
-	// 		mensaje = data.error;
-	// 		toastStore.trigger({ message: data.error, background: 'red' });
-	// 	}
-
-  //   loading = false; // Desactivar loading
-	// }
-
-
-  // TODO: Actualizar a Svelte 5
-	onMount(() => {
+	$effect(() => {
 		const token = localStorage.getItem('token');
 		if (token) goto('/dashboard');
 
@@ -107,24 +89,24 @@
 		<p class="text-green-500">{mensajeExito}</p> <!-- Mostrar mensaje de éxito -->
 	{/if}
 
-  <form method="POST" on:submit={handleSubmit} class="flex flex-col">
+  <form method="POST" onsubmit={handleSubmit} class="flex flex-col">
     <input
-      id="username"
-      bind:value={username}
+      id="username"      
       type="text"
       placeholder="Nombre de usuario"
       class="input"
       disabled={loading}
-      required />
+      required       
+      oninput={(e) => username = (e.currentTarget as HTMLInputElement).value} />
 
     <input
       id="password"
-      bind:value={password}
       type="password"
       placeholder="Contraseña"
       class="input"
       disabled={loading}
-      required />
+      required 
+      oninput={(e) => password = (e.currentTarget as HTMLInputElement).value} />
 
     <button
       type="submit"
@@ -144,21 +126,6 @@
   </form>
 
   <hr class="w-full border border-gray-300 my-2">
-
-  <!-- NOTE: This form worked -->
-	<!-- <input bind:value={username} type="text" placeholder="Nombre de usuario" class="input" disabled={loading} />
-	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading} />
-	<button on:click={login} class="btn-login btn-primary" style="pointer-events: {loading ? 'none' : 'auto'}" disabled={loading}>
-    {#if loading}
-      <span class="loader"></span>Verificando... 
-    {:else}
-      Ingresar
-    {/if}
-  </button>
-
-	{#if mensaje}
-		<p class="text-red-500">{mensaje}</p>
-	{/if} -->
 
   <hr>
 	<p>¿No tienes cuenta? <a href="/signup" class="text-blue-500">Regístrate</a></p>

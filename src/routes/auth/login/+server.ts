@@ -3,6 +3,7 @@ import { prisma } from '$lib/prisma';
 import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
 import { generateToken } from '$lib/jwt';
+import { json } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -39,14 +40,14 @@ export const POST: RequestHandler = async ({ request }) => {
 			maxAge: 60 * 60 * 2 // 2 horas
 		});
 		console.log('Cookie generada: ', cookie);
-
-    return new Response(JSON.stringify({ token }), { 
+    
+    return json({ token }, { 
       status: 200, 
       headers: { 'Set-Cookie': cookie } 
     });
   } catch (error) {
     console.log('Error en el servidor: ', error);
-    return new Response(JSON.stringify({ error: 'Error en el servidor' + error }), { status: 500 });
+    return json({ error: 'Error en el servidor' }, { status: 500 });    
   }
 }
 

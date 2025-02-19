@@ -1,5 +1,6 @@
 import type { RequestHandler } from './$types';
 import { serialize } from 'cookie';
+import { json } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async () => {
   // Eliminar la cookie de sesión
@@ -10,8 +11,8 @@ export const POST: RequestHandler = async () => {
     path: '/',
     maxAge: 0,
   });
-
-  return new Response(JSON.stringify({ message: 'Sesión cerrada' }), {
+  
+  return json({ message: 'Sesión cerrada' }, {
     status: 200,
     headers: { 'Set-Cookie': cookie },
   });

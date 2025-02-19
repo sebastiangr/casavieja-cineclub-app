@@ -11,16 +11,16 @@
     confirmPassword: string;
   }
   
-  let form: FormData = {
+  let form = $state<FormData>({
     email: '',
     username: '',
     password: '',
     confirmPassword: ''
-  };
+  });
   
-  let errors: Partial<Record<keyof FormData, string>> = {};
-  let mensaje: string | null = null;
-  let loading = false;
+  let errors = $state<Partial<Record<keyof FormData, string>>>({});
+  let mensaje = $state<string | null>(null);
+  let loading = $state(false);
 
   // TODO: Borrar todos los toastStore
   const toastStore = getToastStore();
@@ -96,43 +96,43 @@
 
   <h1 class="text-2xl font-bold">Registro</h1>
 
-  <form on:submit|preventDefault={signup} class="flex flex-col">
-    <input 
-      bind:value={form.email} 
+  <form onsubmit={signup} class="flex flex-col">
+    <input       
       type="email" 
       placeholder="Correo" 
       class="input" 
-      disabled={loading} />
+      disabled={loading}             
+      oninput={(e) => form.email = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.email}
       <p class="text-red-500 text-sm">{errors.email}</p>
     {/if}
     
-    <input 
-      bind:value={form.username} 
+    <input       
       type="text" 
       placeholder="Usuario" 
       class="input" 
-      disabled={loading} />
+      disabled={loading} 
+      oninput={(e) => form.username = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.username}
       <p class="text-red-500 text-sm">{errors.username}</p>
     {/if}
     
-    <input 
-      bind:value={form.password} 
+    <input       
       type="password" 
       placeholder="Contraseña" 
       class="input" 
-      disabled={loading} />
+      disabled={loading} 
+      oninput={(e) => form.password = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.password}
       <p class="text-red-500 text-sm">{errors.password}</p>
     {/if}
     
-    <input 
-      bind:value={form.confirmPassword} 
+    <input       
       type="password" 
       placeholder="Confirmar contraseña" 
       class="input" 
-      disabled={loading} />
+      disabled={loading} 
+      oninput={(e) => form.confirmPassword = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.confirmPassword}
       <p class="text-red-500 text-sm">{errors.confirmPassword}</p>
     {/if}
