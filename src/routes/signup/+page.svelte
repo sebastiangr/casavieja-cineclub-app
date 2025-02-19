@@ -21,7 +21,8 @@
   let errors: Partial<Record<keyof FormData, string>> = {};
   let mensaje: string | null = null;
   let loading = false;
-  
+
+  // TODO: Borrar todos los toastStore
   const toastStore = getToastStore();
   
   function validateForm() {
@@ -92,38 +93,67 @@
   
 <!-- TODO: Añadir revelar contraseña. -->
 <div class="flex flex-col items-center justify-center min-h-screen">
+
   <h1 class="text-2xl font-bold">Registro</h1>
-  <form on:submit|preventDefault={signup} class="flex flex-col w-full max-w-sm">
-    <input bind:value={form.email} type="email" placeholder="Correo" class="input" disabled={loading}/>
+
+  <form on:submit|preventDefault={signup} class="flex flex-col">
+    <input 
+      bind:value={form.email} 
+      type="email" 
+      placeholder="Correo" 
+      class="input" 
+      disabled={loading} />
     {#if errors.email}
       <p class="text-red-500 text-sm">{errors.email}</p>
     {/if}
     
-    <input bind:value={form.username} type="text" placeholder="Usuario" class="input" disabled={loading}/>
+    <input 
+      bind:value={form.username} 
+      type="text" 
+      placeholder="Usuario" 
+      class="input" 
+      disabled={loading} />
     {#if errors.username}
       <p class="text-red-500 text-sm">{errors.username}</p>
     {/if}
     
-    <input bind:value={form.password} type="password" placeholder="Contraseña" class="input" disabled={loading}/>
+    <input 
+      bind:value={form.password} 
+      type="password" 
+      placeholder="Contraseña" 
+      class="input" 
+      disabled={loading} />
     {#if errors.password}
       <p class="text-red-500 text-sm">{errors.password}</p>
     {/if}
     
-    <input bind:value={form.confirmPassword} type="password" placeholder="Confirmar contraseña" class="input" disabled={loading}/>
+    <input 
+      bind:value={form.confirmPassword} 
+      type="password" 
+      placeholder="Confirmar contraseña" 
+      class="input" 
+      disabled={loading} />
     {#if errors.confirmPassword}
       <p class="text-red-500 text-sm">{errors.confirmPassword}</p>
     {/if}
     
-    <button type="submit" class="btn-primary btn-signup" style="pointer-events: {loading ? 'none' : 'auto'}" disabled={loading}>
+    <button 
+      type="submit" 
+      class="btn-primary btn-signup" 
+      style="pointer-events: {loading ? 'none' : 'auto'}" 
+      disabled={loading}>
       {#if loading}
         <span class="loader"></span>Creando usuario...
       {:else}
         Crear cuenta
       {/if}
     </button>
+
+    {#if mensaje}
+      <p class="text-red-500 text-center">{mensaje}</p>
+    {/if}
   </form>
-  {#if mensaje}
-    <p class="text-red-500">{mensaje}</p>
-  {/if}
+
+  <hr class="w-full border border-gray-300 my-2">
   <p>¿Ya tienes cuenta? <a href="/" class="text-blue-500">Inicia sesión</a></p>
 </div>

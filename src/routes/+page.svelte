@@ -10,6 +10,9 @@
 	let formValid = false; // Estado de validación del formulario
 	let loading = false; // Estado de loading
 
+	// TODO: Borrar todos los toastStore
+	const toastStore = getToastStore();
+
 	// Validar que los campos no estén vacíos
 	function validateForm() {
 		if (!username.trim() || !password.trim()) {
@@ -22,35 +25,68 @@
 		return true;
 	}
 
-	// Manejo de toasts
-	const toastStore = getToastStore();
+  async function handleSubmit(event: SubmitEvent) {
+    event.preventDefault(); // Prevent default form submission
+    
+    if (!validateForm()) return;
+    
+    mensaje = null;
+    loading = true;
 
-	async function login() {
-		if (!validateForm()) return;
+    try {
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        toastStore.trigger({ message: 'Login exitoso!!!', background: 'green' });
+        goto('/dashboard');
+      } else {
+        mensaje = data.error;
+        toastStore.trigger({ message: data.error, background: 'red' });
+      }
+    } catch (error) {
+      mensaje = 'Error en el servidor';
+      toastStore.trigger({ message: 'Error en el servidor', background: 'red' });
+    } finally {
+      loading = false;
+    }
+  }
+
+  // NOTE: This function worked
+	// async function login() {
+	// 	if (!validateForm()) return;
 		
-		mensaje = null;
-		loading = true; // Activar loading
+	// 	mensaje = null;
+	// 	loading = true; // Activar loading
 
-		const res = await fetch('/auth/login', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ username, password })
-		});
+	// 	const res = await fetch('/auth/login', {
+	// 		method: 'POST',
+	// 		headers: { 'Content-Type': 'application/json' },
+	// 		body: JSON.stringify({ username, password })
+	// 	});
 
-		const data = await res.json();
+	// 	const data = await res.json();
 
-		if (res.ok) {
-			localStorage.setItem('token', data.token);
-			toastStore.trigger({ message: 'Login exitoso', background: 'green' });
-			goto('/dashboard');
-		} else {
-			mensaje = data.error;
-			toastStore.trigger({ message: data.error, background: 'red' });
-		}
+	// 	if (res.ok) {
+	// 		localStorage.setItem('token', data.token);
+	// 		toastStore.trigger({ message: 'Login exitoso', background: 'green' });
+	// 		goto('/dashboard');
+	// 	} else {
+	// 		mensaje = data.error;
+	// 		toastStore.trigger({ message: data.error, background: 'red' });
+	// 	}
 
-    loading = false; // Desactivar loading
-	}
+  //   loading = false; // Desactivar loading
+	// }
 
+
+  // TODO: Actualizar a Svelte 5
 	onMount(() => {
 		const token = localStorage.getItem('token');
 		if (token) goto('/dashboard');
@@ -62,25 +98,68 @@
 	});
 </script>
 
-<!-- TODO: Implementar FORM de forma decuada. -->
 <!-- TODO: Añadir revelar contraseña. -->
 <div class="flex flex-col items-center justify-center min-h-screen">
+
 	<h1 class="text-2xl font-bold">Iniciar sesión</h1>
+
 	{#if mensajeExito}
 		<p class="text-green-500">{mensajeExito}</p> <!-- Mostrar mensaje de éxito -->
 	{/if}
-	<input bind:value={username} type="text" placeholder="Nombre de usuario" class="input" disabled={loading} />
+
+  <form method="POST" on:submit={handleSubmit} class="flex flex-col">
+    <input
+      id="username"
+      bind:value={username}
+      type="text"
+      placeholder="Nombre de usuario"
+      class="input"
+      disabled={loading}
+      required />
+
+    <input
+      id="password"
+      bind:value={password}
+      type="password"
+      placeholder="Contraseña"
+      class="input"
+      disabled={loading}
+      required />
+
+    <button
+      type="submit"
+      class="btn-login btn-primary"
+      style="pointer-events: {loading ? 'none' : 'auto'}"
+      disabled={loading} >
+      {#if loading}
+        <span class="loader"></span> Verificando...
+      {:else}
+        Ingresar
+      {/if}
+    </button>
+  
+    {#if mensaje}
+      <p class="text-red-500 text-center">{mensaje}</p>
+    {/if}
+  </form>
+
+  <hr class="w-full border border-gray-300 my-2">
+
+  <!-- NOTE: This form worked -->
+	<!-- <input bind:value={username} type="text" placeholder="Nombre de usuario" class="input" disabled={loading} />
 	<input bind:value={password} type="password" placeholder="Contraseña" class="input" disabled={loading} />
 	<button on:click={login} class="btn-login btn-primary" style="pointer-events: {loading ? 'none' : 'auto'}" disabled={loading}>
     {#if loading}
-      <span class="loader"></span>Verificando... <!-- Spinner -->
+      <span class="loader"></span>Verificando... 
     {:else}
       Ingresar
     {/if}
   </button>
+
 	{#if mensaje}
 		<p class="text-red-500">{mensaje}</p>
-	{/if}
+	{/if} -->
+
   <hr>
 	<p>¿No tienes cuenta? <a href="/signup" class="text-blue-500">Regístrate</a></p>
 </div>
