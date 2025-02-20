@@ -123,12 +123,11 @@
   }
 </script>
   
-<!-- TODO: Añadir revelar contraseña. -->
 <div class="flex flex-col items-center justify-center min-h-screen">
 
   <h1 class="text-2xl font-bold">Registro</h1>
 
-  <form onsubmit={signup} class="flex flex-col">
+  <form onsubmit={signup} class="flex flex-col w-80">
     <input       
       type="email" 
       placeholder="Correo" 
@@ -141,13 +140,13 @@
     
     <input       
       type="text" 
-      placeholder="Usuario" 
+      placeholder="Nombre de usuario" 
       class="input" 
       disabled={loading} 
       oninput={(e) => form.username = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.username}
       <p class="text-red-500 text-sm">{errors.username}</p>
-    {/if}
+    {/if}    
     
     <div class="relative">
       <input       

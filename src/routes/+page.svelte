@@ -98,7 +98,6 @@
   }
 </script>
 
-<!-- TODO: Añadir revelar contraseña. -->
 <div class="flex flex-col items-center justify-center min-h-screen">
 
 	<h1 class="text-2xl font-bold">Iniciar sesión</h1>
