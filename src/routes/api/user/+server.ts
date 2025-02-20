@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { verifyToken } from '$lib/jwt';
 import { json } from '@sveltejs/kit';
+import { prisma } from '$lib/prisma';
 
 export const GET: RequestHandler = async ({ request }) => {
 	const authHeader = request.headers.get('Authorization');
@@ -15,5 +16,14 @@ export const GET: RequestHandler = async ({ request }) => {
     return json({ error: 'Token inválido o expirado' }, { status: 401 });		
 	}
 	
-  return json({ username: decoded.username }, { status: 200 });
+  const user = await prisma.user.findUnique({
+    where: { id: decoded.userId },
+    select: { username: true, fullName: true }
+  });
+
+  if (!user) {
+    return json({ error: 'Usuario no encontrado' }, { status: 404 });
+  }
+
+  return json(user, { status: 200 });
 };

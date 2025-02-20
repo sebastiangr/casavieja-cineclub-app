@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	
-  let user = $state<{ username: string } | null>(null);
+  let user = $state<{ username: string; fullName: string } | null>(null);
 
 	// Verificar si el usuario está autenticado
 	async function fetchUser() {
@@ -45,7 +45,8 @@
 
 <div class="flex flex-col items-center justify-center min-h-screen">
 	{#if user}
-		<h1 class="text-2xl font-bold">¡Bienvenido, {user.username}!</h1>
+		<h1 class="text-2xl font-bold">¡Bienvenido, {user.fullName}!</h1>
+		<p class="text-gray-600">@{user.username}</p>
 		<button onclick={logout} class="btn-primary">Cerrar sesión</button>
 	{:else}
 		<p>Cargando...</p>

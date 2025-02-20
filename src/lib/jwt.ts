@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import type { SignOptions, Secret } from 'jsonwebtoken';
 
-const SECRET: Secret = process.env.VITE_JWT_SECRET ?? '';
-const EXPIRES_IN: string = process.env.VITE_JWT_EXPIRES_IN || '2h';
+const SECRET: Secret = import.meta.env.VITE_JWT_SECRET ?? '';
+const EXPIRES_IN: string = import.meta.env.VITE_JWT_EXPIRES_IN || '2h';
 
 if (!SECRET) {
   throw new Error('VITE_JWT_SECRET no está definido. Verifica tu configuración de entorno.');

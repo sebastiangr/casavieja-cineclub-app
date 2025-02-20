@@ -17,10 +17,10 @@ import { json } from '@sveltejs/kit';
 export const POST: RequestHandler = async ({ request }) => {
   try {
     // TODO: Añadir console.logs para validar que los datos se están recibiendo correctamente
-    const { email, username, password } = await request.json();
+    const { email, username, fullName, password } = await request.json();
 
     // Validar los datos usando Zod
-    signupSchema.parse({ email, username, password });
+    signupSchema.parse({ email, username, fullName, password });
 
     // Verificar si el username ya existe
     const existingUsername = await prisma.user.findUnique({ 
@@ -43,7 +43,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Crear usuario en la DB
     await prisma.user.create({
-      data: { email, username, password: hashedPassword }
+      data: { email, username, fullName, password: hashedPassword }
     });    
 
     return json({ message: 'Usuario registrado con éxito' }, { status: 201 });    

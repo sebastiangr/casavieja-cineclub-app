@@ -7,6 +7,7 @@
   interface FormData {
     email: string;
     username: string;
+    fullName: string;
     password: string;
     confirmPassword: string;
   }
@@ -14,6 +15,7 @@
   let form = $state<FormData>({
     email: '',
     username: '',
+    fullName: '',
     password: '',
     confirmPassword: ''
   });
@@ -68,6 +70,7 @@
         body: JSON.stringify({
           email: form.email,
           username: form.username,
+          fullName: form.fullName,
           password: form.password
         })
       });
@@ -76,7 +79,7 @@
 
       if (res.ok) {
         toastStore.trigger({ message: 'Registro exitoso, inicia sesión', background: 'green' });
-        form = { email: '', username: '', password: '', confirmPassword: '' };
+        form = { email: '', username: '', fullName: '', password: '', confirmPassword: '' };
         goto('/?registered=true');
       } else {
         mensaje = data.error || 'Error en el registro';
@@ -136,8 +139,8 @@
       oninput={(e) => form.email = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.email}
       <p class="text-red-500 text-sm">{errors.email}</p>
-    {/if}
-    
+    {/if}    
+
     <input       
       type="text" 
       placeholder="Nombre de usuario" 
@@ -146,6 +149,16 @@
       oninput={(e) => form.username = (e.currentTarget as HTMLInputElement).value} />
     {#if errors.username}
       <p class="text-red-500 text-sm">{errors.username}</p>
+    {/if}  
+    
+    <input       
+      type="text" 
+      placeholder="Nombre completo" 
+      class="input" 
+      disabled={loading} 
+      oninput={(e) => form.fullName = (e.currentTarget as HTMLInputElement).value} />
+    {#if errors.fullName}
+      <p class="text-red-500 text-sm">{errors.fullName}</p>
     {/if}    
     
     <div class="relative">
