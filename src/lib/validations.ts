@@ -4,7 +4,7 @@ export const signupSchema = z.object({
   email: z.string().email('Email inválido'),
   username: z.string()
     .min(3, 'El usuario debe tener al menos 3 caracteres')
-    .regex(/^[A-Za-z0-9-_]+$/, 'El nombre de usuario solo puede contener letras básicas (A-Z, a-z), números, guiones (-) y guiones bajos (_)'),
+    .regex(/^[A-Za-z0-9-_]+$/, 'El nombre de usuario solo puede contener letras (A-Z, a-z), números, guiones (-) y guiones bajos (_)'),
   fullName: z.string()
     .min(5, 'El nombre completo debe tener al menos 5 caracteres'),
     // .regex(/^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/, 'El nombre solo puede contener letras y espacios')

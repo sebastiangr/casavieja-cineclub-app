@@ -153,7 +153,7 @@
     
     <input       
       type="text" 
-      placeholder="Nombre completo" 
+      placeholder="Nombre (visible para otros usuarios)" 
       class="input" 
       disabled={loading} 
       oninput={(e) => form.fullName = (e.currentTarget as HTMLInputElement).value} />
