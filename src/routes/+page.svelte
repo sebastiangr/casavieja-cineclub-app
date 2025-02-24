@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 
 	let username = $state('');
