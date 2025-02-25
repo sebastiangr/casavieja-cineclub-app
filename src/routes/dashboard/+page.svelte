@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import { get } from 'svelte/store';
 	
   // let user = $state<{ username: string; fullName: string } | null>(null);
@@ -62,39 +63,19 @@
 	// 	goto('/');
 	// }
 
-  
+  let user = page.data.user;
+
 </script>
-
-
-<!-- <div class="fixed top-0 left-0 p-4 bg-black shadow-md w-full flex justify-between items-center">
-  {#if user}
-    <div class="flex items-center mr-4">
-      <div class="relative">
-        <img
-          src={`https://api.dicebear.com/9.x/initials/svg?seed=${user?.fullName}`}          
-          alt="User Avatar"
-          class="rounded-full w-12 h-12 object-cover"
-        />
-      </div>
-      <div class="text-left">      
-        <h2 class="text-lg font-bold">{user.fullName}</h2>
-        <p class="text-sm text-gray-600">@{user.username}</p>
-      </div>
-    </div>
-  {/if}
-</div> -->
 
 <div class="flex flex-col items-center justify-center min-h-screen">
 
   <h1>DASHBOARD VIEW</h1>
-  <span>Empty for now...</span>
-  <!-- <button onclick={logout} class="btn-primary">Cerrar sesión</button> -->
-	<!-- {#if user}
+
+	{#if user}
 		<h1 class="text-2xl font-bold">¡Bienvenido, {user.fullName}!</h1>
 		<p class="text-gray-600">@{user.username}</p>
-	  <button onclick={logout} class="btn-primary">Cerrar sesión</button>
 	{:else}
 		<p>Cargando...</p>
-	{/if} -->
-  <!-- <button onclick={showUserStore} class="btn-primary">Mostrar userStore</button> -->
+	{/if}
+  
 </div>

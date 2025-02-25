@@ -1,7 +1,6 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import { type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { verifyToken } from '$lib/jwt';
-
 
 declare global {
 	namespace App {

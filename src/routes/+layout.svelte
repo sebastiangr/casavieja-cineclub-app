@@ -11,18 +11,13 @@
   // Inicializar stores globales de Skeleton UI
   initializeStores();
 
-  
-
   let props = $props<{ children: any; user: User | null }>(); // 📌 Obtener los props correctamente
   console.log("🔴 Props en layout.svelte:", props); // 🔍 Verifica todo el objeto props
   console.log("🔴 User Props en layout.svelte:", props.data.user);
 
-
-
   let { children, data } = props; // Extraer 'data' correctamente  
   let user = $state(props.data.user); // 📌 Hacer user reactivo
   console.log("🟡 User en layout.svelte (Corregido):", user); // 🔍 Ahora debería mostrar correctamente el usuario
-
 
   function showUser() {
     console.log("Show user:", page.data.user);
@@ -36,14 +31,6 @@
 </script>
 
 <Header />
-
-
-<div class="absolute top-0 right-0 p-4">
-  <div class="flex flex-row">
-	  <LightSwitch />
-    <button onclick={showUser} class="block ml-4 w-auto">Mostrar userStore</button>
-  </div>
-</div>
 
 <div class="flex items-center justify-center min-h-screen">
 	{@render children()}

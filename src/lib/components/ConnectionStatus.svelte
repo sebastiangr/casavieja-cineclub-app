@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from "$app/state";
+
   let serverStatus = $state<'connected' | 'disconnected'>('disconnected');
   let dbStatus = $state<'connected' | 'disconnected'>('disconnected');  
 
@@ -20,7 +22,7 @@
       dbStatus = 'disconnected';
     }
   }
-
+    
   $effect(() => {
     checkServerStatus();
     checkDbStatus();
@@ -28,6 +30,7 @@
 </script>
 
 <div class="connection-status">
+  <p>@: {page.data.user?.username}</p>
   <div class="status-item">
     <span class="label">Server:</span>
     <!-- <span class="indicator {serverStatus}">{serverStatus}</span> -->

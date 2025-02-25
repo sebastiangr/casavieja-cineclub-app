@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import { serialize } from 'cookie';
 import { generateToken } from '$lib/jwt';
 import { json } from '@sveltejs/kit';
-import { type User } from '$lib/stores/userStore';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
