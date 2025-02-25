@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 
 	let username = $state('');
@@ -11,8 +11,6 @@
 	let formValid = $state(false); // Estado de validación del formulario
 	let loading = $state(false); // Estado de loading
 
-	// TODO: Borrar todos los toastStore
-	const toastStore = getToastStore();
 
 	// Validar que los campos no estén vacíos
 	function validateForm() {
@@ -47,22 +45,23 @@
       const res = await fetch('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Enviar cookies para mantener la sesión
         body: JSON.stringify({ username, password })
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('token', data.token);
-        toastStore.trigger({ message: 'Login exitoso!!!', background: 'green' });
+        console.log("🔵 Login exitoso, invalidando caché...");
+        localStorage.setItem('token', data.token);   
+        
+        await invalidateAll(); // Recargar `+layout.server.ts` para obtener `locals.user`
         goto('/dashboard');
       } else {
-        mensaje = data.error;
-        toastStore.trigger({ message: data.error, background: 'red' });
+        mensaje = data.error;        
       }
     } catch (error) {
-      mensaje = 'Error en el servidor';
-      toastStore.trigger({ message: 'Error en el servidor', background: 'red' });
+      mensaje = 'Error en el servidor';      
     } finally {
       loading = false;
     }

@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { verifyToken } from '$lib/jwt';
 
@@ -15,13 +15,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   const cookies = parse(event.request.headers.get('cookie') || '');
   const token = cookies.session;
 
-	// if (token) {
-	// 	const decoded = verifyToken(token);
-	// 	if (decoded) {
-	// 		event.locals.user = decoded;
-	// 	}
-	// }
-
   if (token) {
 		const decoded = verifyToken(token);
     if (decoded && typeof decoded === 'object' && 'userId' in decoded && 'username' in decoded) {
@@ -32,10 +25,10 @@ export const handle: Handle = async ({ event, resolve }) => {
         username: decoded.username, 
         fullName: decoded.fullName 
       };
-      console.log('User saved in event.locals:', event.locals.user);
+      console.log("🟢 Usuario autenticado en locals:", event.locals.user);
     } else {
       event.locals.user = null;
-      console.log('Invalid token structure');
+      console.log("🔴 Token inválido, eliminando usuario.");
     }
 		// if (decoded && typeof decoded === 'object' && 'userId' in decoded && 'username' in decoded) {
 		// 	event.locals.user = { userId: decoded.userId, username: decoded.username };
@@ -44,13 +37,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 		// }
 	} else {
 		event.locals.user = null;
-    console.log('User NOT saved in event.locals:');
+    console.log("🔴 No hay token, usuario no autenticado.");
 	}
 
   // Redirigir si intenta acceder a `/dashboard` sin estar autenticado
-  if (!event.locals.user && event.url.pathname.startsWith('/dashboard')) {
-		return new Response(null, { status: 302, headers: { Location: '/' } });
-	}
+  // if (!event.locals.user && event.url.pathname.startsWith('/dashboard')) {
+	// 	// return new Response(null, { status: 302, headers: { Location: '/' } });
+  //   console.log("🔴 Acceso no autorizado, redirigiendo al inicio...");
+  //   throw redirect(303, '/'); // Usar redirect() en lugar de Response()
+	// }
 
   return resolve(event);
 }
