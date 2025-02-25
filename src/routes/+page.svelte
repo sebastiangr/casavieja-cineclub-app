@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { getToastStore } from '@skeletonlabs/skeleton';
 
 	let username = $state('');
 	let password = $state('');
@@ -100,11 +99,12 @@
 
 	<h1 class="text-2xl font-bold">Iniciar sesión</h1>
 
-	{#if mensajeExito}
-		<p class="text-green-500">{mensajeExito}</p> <!-- Mostrar mensaje de éxito -->
-	{/if}
+  <form method="POST" onsubmit={handleSubmit} class="flex flex-col w-80">
+    
+    {#if mensajeExito}
+		  <p class="text-green-500 text-center">{mensajeExito}</p> <!-- Mostrar mensaje de éxito -->
+	  {/if}
 
-  <form method="POST" onsubmit={handleSubmit} class="flex flex-col">
     <input
       id="username"      
       type="text"

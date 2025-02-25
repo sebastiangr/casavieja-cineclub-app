@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { tick } from "svelte";
 
   let serverStatus = $state<'connected' | 'disconnected'>('disconnected');
   let dbStatus = $state<'connected' | 'disconnected'>('disconnected');  
 
   async function checkServerStatus() {
     try {
-      const response = await fetch('/api/user');
+      // const response = await fetch('/api/user');
+      const response = await fetch('/api/user', {
+        credentials: 'same-origin'
+      });
+      console.log('Response status connection:', response.status);
       serverStatus = response.ok ? 'connected' : 'disconnected';
     } catch {
       serverStatus = 'disconnected';
@@ -24,7 +29,9 @@
   }
     
   $effect(() => {
-    checkServerStatus();
+    if (page.data.user) {
+      checkServerStatus();
+    }
     checkDbStatus();
   });
 </script>
@@ -33,14 +40,12 @@
   <p>@: {page.data.user?.username}</p>
   <div class="status-item">
     <span class="label">Server:</span>
-    <!-- <span class="indicator {serverStatus}">{serverStatus}</span> -->
     <span class="indicator {serverStatus === 'connected' ? 'text-green-500' : 'text-red-500'}">
       {serverStatus}
     </span>
   </div>
   <div class="status-item">
     <span class="label">Database:</span>
-    <!-- <span class="indicator {dbStatus}">{dbStatus}</span> -->
     <span class="indicator {dbStatus === 'connected' ? 'text-green-500' : 'text-red-500'}">
       {dbStatus}
     </span>
