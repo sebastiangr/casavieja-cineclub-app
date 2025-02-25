@@ -14,4 +14,15 @@ model User {
   password  String
   createdAt DateTime @default(now())
   fullName  String?
+
+  messages Message[] // Relación inversa: Un usuario tiene varios mensajes
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

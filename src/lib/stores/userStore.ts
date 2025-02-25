@@ -1,11 +1,12 @@
 import { page } from '$app/state';
 import { writable } from 'svelte/store';
+import type { User } from '$lib/types';
 
-export interface User {
-  id: string;
-  username: string;
-  fullName: string; // Agregado el campo fullName
-}
+// export interface User {
+//   id: string;
+//   username: string;
+//   fullName: string;
+// }
 
 
 export const userStore = writable<User | null>(null); // ✅ Store inicializado en null
