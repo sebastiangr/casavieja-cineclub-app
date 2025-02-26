@@ -7,7 +7,12 @@
 
 /* Estilos personalizados */
 .input {
-	@apply w-80 p-2 border rounded-lg my-2;
+	/* @apply w-80 p-2 border rounded-lg my-2; */
+  @apply py-2 px-2 my-2 border rounded-md;
+}
+
+.btn {
+  @apply py-2 px-4 my-2 rounded-md;
 }
 
 .btn-primary {
@@ -39,4 +44,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* FIXES */
+:focus-visible {
+  outline: none;
 }

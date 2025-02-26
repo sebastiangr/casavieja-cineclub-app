@@ -4,7 +4,8 @@
   import { LightSwitch } from '@skeletonlabs/skeleton';
   import { initializeStores } from '@skeletonlabs/skeleton';
   import ConnectionStatus from '$lib/components/ConnectionStatus.svelte';
-  import { userStore, type User } from '$lib/stores/userStore';
+  import { type User } from '$lib/types';
+  import { userStore } from '$lib/stores/userStore';
 	import LogoutButton from '$lib/components/LogoutButton.svelte';
 	import { page } from '$app/state';
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-  import type { Message } from '$lib/types';
-	import { userStore } from '$lib/stores/userStore';
+  import type { Message } from '$lib/types';	
+  import { CircleX, Trash } from 'lucide-svelte';
 
   let messages = $state<Message[]>([]);
   let newMessage = $state('');
@@ -59,17 +59,22 @@
 
   <div class="items-center w-5/6 mt-5">
 
-    <h1 class="text-2xl font-bold text-center">Mensajes Públicos</h1>
+    <h1 class="text-2xl font-bold text-center mb-5">Mensajes Públicos</h1>
 
     <ul class="flex flex-col mb-5">
       {#each messages as message}
         <li class="card mb-4">
-          <header class="card-header"><strong>{message.user.username}</strong></header>
+          <header class="card-header"><strong>Por: {message.user.username}</strong></header>
           <section class="p-4">{message.content}</section>
-          <footer class="card-footer">
-            {message.createdAt}
+          <footer class="card-footer flex justify-between items-center">
+            <!-- TODO: Formatear fecha -->
+            <span class="text-gray-400">{message.createdAt}</span>
+            <!-- TODO: Repensar este botón -->
             {#if user?.userId === message.user.id}
-              <button onclick={() => deleteMessage(message.id)}>🗑 Eliminar</button>
+                <button class="flex items-center px-1 group hover:text-red-500" onclick={() => deleteMessage(message.id)}>
+                  <span class="pr-2 opacity-0 group-hover:opacity-100 transition-opacity">Borrar</span>
+                  <CircleX strokeWidth={1.25} />
+                </button>
             {/if}
           </footer>
         </li>
@@ -87,9 +92,11 @@
       {/each}
     </ul> -->
   
+  </div>
+
+  <div class="items-center mt-5 w-5/6 md:w-1/2">
     <textarea bind:value={newMessage} rows="4" class="textarea p-4" placeholder="Escribe un mensaje..."></textarea>
     <button onclick={sendMessage} type="button" class="btn variant-filled-primary w-full mt-4">Enviar</button>
-  
   </div>
 
 </div>

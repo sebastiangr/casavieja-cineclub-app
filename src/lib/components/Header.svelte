@@ -1,8 +1,9 @@
 <script lang="ts">
   import LogoutButton from '$lib/components/LogoutButton.svelte';
-  import { page } from '$app/state'; // ✅ Importar desde @app/state
-	import { userStore, type User } from '$lib/stores/userStore';
+	import type { User } from '$lib/types';
+	import { userStore} from '$lib/stores/userStore';
 	import { LightSwitch } from '@skeletonlabs/skeleton';
+  import { LogIn } from 'lucide-svelte';
     
   let user: User | null;
   userStore.subscribe((value) => user = value); // Reactividad automática
@@ -10,9 +11,6 @@
 
 <header class="absolute flex justify-between items-center w-full h-20 pl-8 pr-8 text-white">
   {#if user}
-    <div>
-      <LogoutButton />
-    </div>
     <div class="flex items-center mr-4">
       <div class="relative">
         <img
@@ -27,8 +25,18 @@
       </div>
     </div>
   {:else}
-    <a href="/" class="text-blue-400">Iniciar sesión</a>
+    <!-- TODO: Volver componente -->
+    <button type="button" class="btn btn-sm variant-filled-primary">
+      <LogIn strokeWidth={1.25} />
+      Iniciar sesión
+    </button>
   {/if}
+
+  <!-- TODO: Reubicar este switch -->
   <LightSwitch />
+
+  {#if user}
+    <LogoutButton />
+  {/if}
 </header>
 

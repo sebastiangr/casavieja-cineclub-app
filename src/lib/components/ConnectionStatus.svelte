@@ -74,11 +74,11 @@
     text-transform: capitalize;
   }
 
-  .indicator.connected {
+  /* .indicator.connected {
     color: #4ade80;
   }
 
   .indicator.disconnected {
     color: #f87171;
-  }
+  } */
 </style>
