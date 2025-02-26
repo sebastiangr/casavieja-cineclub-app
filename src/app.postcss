@@ -32,13 +32,20 @@
 .loader {
   border: 2px solid transparent;
   border-top-color: rgb(255, 255, 255); /* Color del spinner */
-  border-radius: 50%;
-  width: 20px;
+  border-radius: 50%;  
   height: 20px;
+  width: 20px;
   animation: spin 1s linear infinite;
   margin-right: 10px;
   /* margin-left: -30px; */
 }
+.loader.big {
+  border: 3px solid transparent;
+  border-top-color: rgb(255, 255, 255);
+  height: 60px;
+  width: 60px;  
+}
+
 
 @keyframes spin {
   to {
