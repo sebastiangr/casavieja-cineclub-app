@@ -67,16 +67,6 @@
     }
   }
 
-	$effect(() => {
-		const token = localStorage.getItem('token');
-		if (token) goto('/dashboard');
-
-		const urlParams = new URLSearchParams(window.location.search);
-		if (urlParams.get('registered') === 'true') {
-			mensajeExito = 'Usuario creado exitosamente. Ingrese sus credenciales para continuar.'; // Asignar mensaje de éxito
-		}
-	});
-
   // SHOW/HIDE PASSWORD
   let showPassword = $state(false);
   let timeoutId = $state<NodeJS.Timeout | null>(null);
@@ -94,6 +84,18 @@
       timeoutId = null;
     }, 2000);
   }
+  
+
+	$effect(() => {
+		const token = localStorage.getItem('token');
+		if (token) goto('/dashboard');
+
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('registered') === 'true') {
+			mensajeExito = 'Usuario creado exitosamente. Ingrese sus credenciales para continuar.'; // Asignar mensaje de éxito
+		}
+	});
+
 </script>
 
 <div class="flex flex-col items-center justify-center min-h-screen">
