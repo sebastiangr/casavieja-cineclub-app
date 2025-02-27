@@ -15,3 +15,27 @@ export interface Message {
     fullName?: string;
   };
 }
+
+export interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+  director: string;
+}
+
+export interface MovieRecommendation extends Movie {
+  recommendedAt: Date;
+  recommendedBy: string;
+  director : string;
+  votes: number; // Contador de votos
+  hasVoted: boolean; // Indica si el usuario ya ha votado
+}
+
+export interface SearchResponse {
+  results: Movie[];
+  total_results: number;
+  total_pages: number;
+}

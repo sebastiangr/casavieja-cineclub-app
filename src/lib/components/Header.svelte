@@ -35,8 +35,8 @@
   {#if user}
     <div class="flex flex-row justify-center items-center gap-x-4">
       <a href="/dashboard" class="text-primary-500 hover:text-primary-400">Dashboard</a>
-      <a href="/messages" class="text-primary-500 hover:text-primary-400"> Mensajes</a>
-      <a href="/signup" class="text-primary-500 hover:text-primary-400">Registrarse</a>      
+      <a href="/messages" class="text-primary-500 hover:text-primary-400">Mensajes</a>      
+      <a href="/peliculas" class="text-primary-500 hover:text-primary-400">Películas</a>      
     </div>
   {/if}
   
@@ -44,8 +44,6 @@
     {#if user}
       <LogoutButton />
     {/if}
-    <!-- TODO: Reubicar este switch -->
-    <LightSwitch />
   </div>
 </header>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { tick } from "svelte";
+  import { LightSwitch } from '@skeletonlabs/skeleton';
 
   let serverStatus = $state<'connected' | 'disconnected'>('disconnected');
   let dbStatus = $state<'connected' | 'disconnected'>('disconnected');  
@@ -37,6 +38,8 @@
 </script>
 
 <div class="connection-status">
+  <!-- TODO: Reubicar este switch -->
+  <LightSwitch />
   <p>@: {page.data.user?.username}</p>
   <div class="status-item">
     <span class="label">Server:</span>

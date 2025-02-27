@@ -2,7 +2,7 @@ import { url } from 'inspector';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
-const protectedRoutes = ['/dashboard', '/messages']; // Rutas que requieren autenticación
+// const protectedRoutes = ['/dashboard', '/messages']; // Rutas que requieren autenticación
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 
