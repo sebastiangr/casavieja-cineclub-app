@@ -55,7 +55,7 @@
 <div class="flex flex-col items-center justify-center min-h-screen pt-20 pb-20">
 
   <!-- LISTA MENSAJES -->
-  <div class="items-center w-5/6 mt-5">
+  <div class="items-center mt-5">
     <h1 class="text-2xl font-bold text-center mb-5">Mensajes Públicos</h1>
 
     {#if loading}
@@ -66,9 +66,9 @@
       </div>
     {:else}
       <!-- Mostrar listado de mensajes -->
-      <ul class="flex flex-col mb-5">
+      <ul class="flex flex-col items-center mb-5">
         {#each messages as message}
-          <li class="card mb-4">
+          <li class="card w-5/6 md:min-w-[460px] md:w-5/6 mb-4">
             <header class="card-header"><strong>Por: {message.user.username}</strong></header>
             <section class="p-4">{message.content}</section>
             <footer class="card-footer flex justify-between items-center">
