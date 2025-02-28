@@ -8,6 +8,7 @@
   import { userStore } from '$lib/stores/userStore';
 	import LogoutButton from '$lib/components/LogoutButton.svelte';
 	import { page } from '$app/state';
+	import MenuBar from '$lib/components/MenuBar.svelte';
 
   // Inicializar stores globales de Skeleton UI
   initializeStores();
@@ -33,10 +34,12 @@
 
 <Header />
 
-<div class="flex items-center justify-center min-h-screen">
+<div class="flex justify-center min-h-screen pt-20">
 	{@render children()}
 </div>
 
 <div class="absolute bottom-0 left-0 p-4">
 	<ConnectionStatus />
 </div>
+
+<MenuBar />

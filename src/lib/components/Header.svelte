@@ -9,9 +9,9 @@
   userStore.subscribe((value) => user = value); // Reactividad automática
 </script>
 
-<header class="absolute flex justify-between items-center w-full h-20 pl-8 pr-8 text-white">
+<header class="fixed flex justify-between items-center w-full h-20 pl-8 pr-8 z-50">
   {#if user}
-    <div class="flex items-center mr-4">
+    <div class="hidden md:flex items-center mr-4  ">
       <div class="relative">
         <img
           src={`https://api.dicebear.com/9.x/initials/svg?seed=${user?.fullName}`}          
@@ -33,7 +33,7 @@
   {/if}
 
   {#if user}
-    <div class="flex flex-row justify-center items-center gap-x-4">
+    <div class="hidden md:flex flex-row justify-center items-center gap-x-4 ">
       <a href="/dashboard" class="text-primary-500 hover:text-primary-400">Dashboard</a>
       <a href="/messages" class="text-primary-500 hover:text-primary-400">Mensajes</a>      
       <a href="/peliculas" class="text-primary-500 hover:text-primary-400">Películas</a>      

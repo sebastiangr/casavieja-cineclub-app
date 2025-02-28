@@ -6,7 +6,7 @@
 
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-screen">
+<div class="flex flex-col items-center justify-center">
 
   <h1>DASHBOARD VIEW</h1>
 

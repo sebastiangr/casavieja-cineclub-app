@@ -35,7 +35,8 @@ export async function checkConnection(): Promise<string> {
     throw new Error(`Error connecting to TMDB API: ${response.statusText}`);
   }
   
-  return 'Conexión exitosa con el API de TMDB';
+  // return 'Conexión exitosa con el API de TMDB';
+  return 'connected';
 }
 
 export async function searchMovies(query: string): Promise<SearchResponse> {

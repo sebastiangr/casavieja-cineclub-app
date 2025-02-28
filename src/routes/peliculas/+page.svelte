@@ -23,11 +23,10 @@
 
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-screen">
+<div class="flex flex-col align-top items-center w-5/6">
 
   <h1>PELÍCULAS</h1>
 
-    
   <SearchBar />
     
   <div class="space-y-4">
@@ -40,7 +39,7 @@
     {:else}
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {#each $movieStore as movie}
-          <div class="bg-white rounded-lg shadow-md overflow-hidden relative transform transition-transform hover:scale-95">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden relative border-transparent border-2 border-amber-900 hover:border-amber-500 hover:border-2 duration-500 ease-in-out">
             <button
               class="absolute top-0 right-0 p-2 text-red-500 hover:text-red-700"
               onclick={() => movieStore.removeMovie(movie.id)}
@@ -88,18 +87,5 @@
       </div>
     {/if}
   </div>
-
-  <div class="text-center text-gray-500 py-4">
-    {#if connectionStatus}
-      <p>{connectionStatus}</p>
-    {/if}
-  </div>
-
-	<!-- {#if user}
-		<h1 class="text-2xl font-bold">¡Bienvenido, {user.fullName}!</h1>
-		<p class="text-gray-600">@{user.username}</p>
-	{:else}
-		<p>Cargando...</p>
-	{/if} -->
 
 </div>

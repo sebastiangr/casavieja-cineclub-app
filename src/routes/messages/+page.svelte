@@ -52,7 +52,7 @@
 
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-screen pt-20 pb-20">
+<div class="flex flex-col items-center justify-center pb-20">
 
   <!-- LISTA MENSAJES -->
   <div class="items-center mt-5">

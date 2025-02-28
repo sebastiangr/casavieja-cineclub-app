@@ -6,6 +6,7 @@
   import { writable } from 'svelte/store';
   import { movieStore } from '$lib/stores/movies'; // Import the movie store
   import { getMovieDetails } from '$lib/services/tmdb'; // Import the new function
+	import { Search } from 'lucide-svelte';
 
   let searchTerm = '';
   let error = '';
@@ -68,27 +69,38 @@
   }
 </script>
 
-<div class="space-y-4">
+<div class="space-y-4 relative w-full md:w-[460px]">
+
+  <!-- SEARCH BAR -->
   <div class="relative">
-    <input
+
+    <!-- TODO: Borrar!!! -->
+    <!-- <input
       type="text"
       bind:value={recommendedBy}
       placeholder="Recomendado por..."
       class="w-full my-5 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-    />    
-    <input
-      type="text"
-      value={searchTerm}
-      on:input={handleInput}
-      placeholder="Buscar películas..."
-      class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-    />
+    />     -->
+
+    <div class="relative w-full md:w-[460px] items-center">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
+        <Search strokeWidth={1.25} />
+      </div>
+      <input
+        type="text"
+        value={searchTerm}
+        oninput={handleInput}
+        placeholder="Buscar películas..."
+        class="search-input input"
+      />
+    </div>
     
     {#if $loading}
       <div class="absolute right-3 top-2.5">
         <div class="animate-spin h-5 w-5 border-2 border-blue-500 rounded-full border-t-transparent"></div>
       </div>
     {/if}
+
   </div>
 
   {#if error}
@@ -97,12 +109,13 @@
     </div>
   {/if}
   
+  <!-- RESULTS -->
   {#if $searchResults.length > 0 && searchTerm.length >= 2}
-    <div class="bg-white shadow-lg rounded-lg divide-y absolute z-50">
+    <div class="bg-white w-full shadow-lg rounded-md divide-y absolute z-50">
       {#each $searchResults.slice(0, 5) as movie}
         <button
           class="w-full px-4 py-2 flex items-center gap-4 hover:bg-gray-50 transition"
-          on:click={async () => {
+          onclick={async () => {
             const details = await getMovieDetails(movie.id);
             addMovieWithRecommendation(details);
             console.log('Movie details:', details);
@@ -146,3 +159,9 @@
   {/if}
 </div>
 
+<style>
+  .search-input {
+    padding-left: 50px;
+  }
+
+</style>
