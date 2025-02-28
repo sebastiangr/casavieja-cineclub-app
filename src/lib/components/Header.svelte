@@ -4,13 +4,18 @@
 	import { userStore} from '$lib/stores/userStore';
 	import { LightSwitch } from '@skeletonlabs/skeleton';
   import { LogIn } from 'lucide-svelte';
+	import UserCard from './UserCard.svelte';
     
   let user: User | null;
   userStore.subscribe((value) => user = value); // Reactividad automática
 </script>
 
-<header class="fixed flex justify-between items-center w-full h-20 pl-8 pr-8 z-50">
-  {#if user}
+<header class="fixed flex justify-center items-center w-full h-20 z-50">
+
+  <!-- TODO: Redefine user card -->
+  <UserCard />
+
+  <!-- {#if user}
     <div class="hidden md:flex items-center mr-4  ">
       <div class="relative">
         <img
@@ -24,21 +29,25 @@
         <p class="text-sm text-gray-600">@{user.username}</p>
       </div>
     </div>
-  {:else}
+  {:else} -->
     <!-- TODO: Volver componente -->
-    <button type="button" class="btn btn-sm variant-filled-primary">
+    <!-- <button type="button" class="btn btn-sm variant-filled-primary">
       <LogIn strokeWidth={1.25} />
       Iniciar sesión
     </button>
-  {/if}
+  {/if} -->
 
   {#if user}
+    <h1>Bienvenido, {user.fullName}</h1>
+  {/if}
+
+  <!-- {#if user}
     <div class="hidden md:flex flex-row justify-center items-center gap-x-4 ">
       <a href="/dashboard" class="text-primary-500 hover:text-primary-400">Dashboard</a>
       <a href="/messages" class="text-primary-500 hover:text-primary-400">Mensajes</a>      
       <a href="/peliculas" class="text-primary-500 hover:text-primary-400">Películas</a>      
     </div>
-  {/if}
+  {/if} -->
   
   <div class="flex flex-row items-center">
     {#if user}

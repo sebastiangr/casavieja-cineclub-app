@@ -52,6 +52,9 @@
 
 </script>
 
+<!-- TODO: Al hacer logout salir al login, proteger ruta. -->
+<!-- TODO: Añadir loading y deshabilitar formulario al enviar un nuevo mensaje. -->
+
 <div class="flex flex-col items-center justify-center pb-20">
 
   <!-- LISTA MENSAJES -->

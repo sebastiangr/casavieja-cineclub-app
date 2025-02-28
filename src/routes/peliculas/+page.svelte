@@ -25,12 +25,12 @@
 
 <div class="flex flex-col align-top items-center w-5/6">
 
-  <h1>PELÍCULAS</h1>
+  <!-- <h1 class="text-2xl font-semibold">PELÍCULAS</h1>
+  <p class="text-primary-600 text-md p-4 mb-5">Busca y agrega una película que quieras recomendar para el próximo cineclub Casa Vieja 🎬</p> -->
 
   <SearchBar />
     
-  <div class="space-y-4">
-    <h2 class="text-2xl font-semibold">Películas Recomendadas</h2>
+  <div class="space-y-4 pt-4">
     
     {#if $movieStore.length === 0}
       <p class="text-center text-gray-500 py-8">

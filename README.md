@@ -1,22 +1,28 @@
-# sv
+# CineClubApp
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+CineClubApp is a Svelte-based web application designed to provide users with a platform to explore and manage their proposal movies for a comunity cinema club. 
+The application features user authentication, movie browsing, and messaging functionalities.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **User Authentication**: Users can sign up, log in, and log out.
+- **Movie Browsing**: Explore a collection of movies with detailed information.
+- **Messaging**: Users can send and receive messages related to their movie preferences.
+- **Database Status**: Check the status of the database connection.
+
+## Installation
+
+To get started with the project, clone the repository and install the dependencies:
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone <repository-url>
+cd casavieja-cineclub-app
+npm install
 ```
 
-## Developing
+## Usage
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To start the development server, run:
 
 ```bash
 npm run dev
@@ -25,14 +31,30 @@ npm run dev
 npm run dev -- --open
 ```
 
-## Building
-
-To create a production version of your app:
+To create a production version of your app, run:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+You can preview the production build with:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run preview
+```
+
+## Routes
+
+- **/auth/login**: User login page.
+- **/auth/signup**: User signup page.
+- **/dashboard**: User dashboard with movie management features.
+- **/peliculas**: Browse movies.
+- **/messages**: View and send messages.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License.

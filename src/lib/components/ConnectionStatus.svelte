@@ -58,10 +58,10 @@
 
 <!-- <div class="connection-status {showConnectionStatus ? 'collapsed' : ''}" class:show={showConnectionStatus}> -->
 <!-- <div class="connection-status {showConnectionStatus ? '' : 'collapsed'}"> -->
-<div class="connection-status bg-surface-800 p-4 m-2 {showConnectionStatus ? 'collapsed' : ''}">
+<div class="connection-status bg-surface-800  border-surface-700 hover:border-surface-600 border-[1px] p-4 m-2 {showConnectionStatus ? 'collapsed' : ''}">
   <!-- TODO: Hacer que el botón abra y cierre todo el bloque de connection-status -->
   <div class="absolute right-0 bottom-0">    
-    <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Revisar conexión TMDB" onclick={toggleConnectionStatus}>
+    <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Estado de conexiones" onclick={toggleConnectionStatus}>
       <CircleChevronDown strokeWidth={1.25} size={26} stroke="currentColor"/>
     </button>
   </div>
@@ -73,7 +73,7 @@
     </span>
   </div>
   <div class="status-item status_server">
-    <span class="label">Server:</span>
+    <span class="label">User status:</span>
     <span class="indicator {serverStatus === 'connected' ? 'text-green-500' : 'text-red-500'}">
       {serverStatus}
     </span>
@@ -95,7 +95,7 @@
     right: 1rem;
     padding: 8px 40px 8px 12px;
     /* background: rgba(22, 22, 22, 0.5); */
-    border: 1px solid rgb(34, 34, 34);
+    /* border: 1px solid rgb(34, 34, 34); */
     border-radius: 0.375rem;
     color: white;
     font-size: 0.875rem;

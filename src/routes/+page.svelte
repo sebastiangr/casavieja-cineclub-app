@@ -85,7 +85,6 @@
     }, 2000);
   }
   
-
 	$effect(() => {
 		const token = localStorage.getItem('token');
 		if (token) goto('/dashboard');
@@ -98,7 +97,7 @@
 
 </script>
 
-<div class="flex flex-col items-center justify-center min-h-screen">
+<div class="flex flex-col items-center justify-center">
 
 	<h1 class="text-2xl font-bold">Iniciar sesión</h1>
 
