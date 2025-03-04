@@ -91,7 +91,7 @@
 
 		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.get('registered') === 'true') {
-			mensajeExito = 'Usuario creado exitosamente. Ingrese sus credenciales para continuar.'; // Asignar mensaje de éxito
+			mensajeExito = 'Usuario creado exitosamente. Ingrese sus datos de usuario para continuar.'; // Asignar mensaje de éxito
 		}
 	});
 
@@ -128,7 +128,7 @@
 
       <button
         type="button"
-        class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-500"
+        class="absolute inset-y-0 right-0 px-3 flex items-center text-surface-400 hover:text-surface-300"
         onclick={togglePasswordVisibility}>
         {#if showPassword}
           <Eye strokeWidth={1.25}/>

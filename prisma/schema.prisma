@@ -18,6 +18,7 @@ model User {
   messages Message[] // Relación inversa: Un usuario tiene varios mensajes
 
   Movie Movie[]
+  votes Vote[]
 }
 
 model Message {
@@ -45,4 +46,13 @@ model Movie {
   votes Int @default(0)
   hasVoted Boolean @default(false)
   user User @relation(fields: [recommendedBy], references: [id])
+  voteRelationships Vote[]
+}
+
+model Vote {
+  id       String   @id @default(cuid())
+  userId   String
+  movieId  String
+  user     User     @relation(fields: [userId], references: [id])
+  movie    Movie    @relation(fields: [movieId], references: [id])
 }

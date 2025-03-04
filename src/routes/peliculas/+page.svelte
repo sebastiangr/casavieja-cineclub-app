@@ -3,7 +3,7 @@
   import { getModalStore, type ModalSettings as SkeletonModalSettings } from '@skeletonlabs/skeleton';	
   import SearchBar from '$lib/components/SearchBar.svelte';
 	import type { Movie, User } from '$lib/types';
-	import { CircleX } from 'lucide-svelte';
+	import { CircleX, Minus, Plus } from 'lucide-svelte';
 
   // Modal variables
   let showModal = false;
@@ -53,6 +53,56 @@
   async function cancelDelete() {
   }
 
+
+  // VOTES
+  let loading_vote = false;
+  // let hasVoted: Record<string, boolean> = {};
+  let voted = false;
+
+  // async function toggleVote(movieId: string, userId: string) {
+  //   try {
+  //     const response = await fetch('/api/vote', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ movieId, userId }),
+  //     });
+
+  //     if (response.ok) {
+  //       // Refrescar la página para actualizar el contador de votos
+  //       voted = !voted;
+  //       fetchMovies();
+  //     } else {
+  //       console.error('Error al actualizar el voto');
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     loading_vote = false;
+  //   }
+  // }
+
+  // async function getHasVoted(movies: any[]) {
+  //   const responses = await Promise.all(movies.map(movie => {
+  //     return prisma.vote.findFirst({
+  //       where: {
+  //         userId: user.userId,
+  //         movieId: movie.id,
+  //       },
+  //     });
+  //   }));
+
+  //   responses.forEach((response, index) => {
+  //     if (response) {
+  //       hasVoted[movies[index].id] = true;
+  //     } else {
+  //       hasVoted[movies[index].id] = false;
+  //     }
+  //   });
+  // }
+
+
   // MODAL Para eliminar película
   const modalStore = getModalStore();
 
@@ -62,7 +112,7 @@
       component: 'modalDelete',
       meta: {
         title: 'Confirmación',
-        message: '¿Estás seguro que deseas eliminar la pelicula?',
+        message: 'Estás seguro que deseas eliminar',
         additionalField: ` ${movie.title}`,
         onConfirm: () => confirmDelete(movie.id),
         onCancel: () => cancelDelete(),
@@ -90,6 +140,11 @@
   <div class="space-y-4 pt-4">
 
     {#if checkMoviesLength}
+
+      <!-- {#if loading_vote}
+        <div class="loader big"></div>
+      {/if} -->
+
 
       {#if loading}
       <!-- Mostrar preloader mientras se carga el listado -->
@@ -120,24 +175,46 @@
                 {/if}
               </a>
 
-              <div class="p-4">
+              <div class="pr-4 pl-4 pb-4 pt-0">
+
+                <div class="text-center mb-2 -mt-[10px]">
+                  <span class="badge variant-filled-primary rounded">{movie.recommendedByFullName || 'N.N.'}</span>
+                </div>
+
                 <div class="text-center pb-2">
                   <h3 class="text-primary-500 font-semibold text-lg">{movie.title}</h3>
                   <p class="text-md font-bold italic text-surface-300">
                     ({(new Date(movie.release_date)).getFullYear() || 'Desconocido'})
                   </p>
                 </div>
-                <p class="text-sm text-surface-300">
-                  Dir: {movie.director || 'Desconocido'}
-                </p>
-                <p class="text-sm text-surface-300">
-                  Votos: {movie.votes}
-                </p>
-                <p class="text-sm text-surface-300">
-                  Recomendada por: <br> {movie.recommendedByFullName || 'N.N.'} @ {movie.recommendedByUsername || 'N.N.'}
+                
+                <div class="flex flex-row justify-between align-middle items-center">
+                  <p class="text-sm text-surface-300 text-center">
+                    Dir: {movie.director || 'Desconocido'}
+                  </p>
+                  <!-- <button class="btn btn-round w-[40px] h-[40px] variant-filled-primary text-primary-200 group"> -->
+                    <!-- onclick={() => toggleVote(movie.id, user.userId)}> -->
+                    <!-- disabled={hasVoted[movie.id]}> -->
+                    <!-- {#if loading}
+                      <div class="loader"></div>
+                    {:else} -->
+                      <!-- <span class="flex group-hover:hidden">{movie.votes}</span> -->
+                      <!-- {#if hasVoted[movie.id]} -->
+                        <!-- <Minus class="hidden group-hover:flex" strokeWidth={1.75} size={30} stroke="white"/> -->
+                      <!-- {:else} -->
+                        <!-- <Plus class="hidden group-hover:flex" strokeWidth={1.75} size={30} stroke="white"/> -->
+                      <!-- {/if} -->
+                    <!-- {/if} -->
+                  <!-- </button> -->
+                  <!-- <p class="text-sm text-surface-300">
+                    Votos: 
+                  </p> -->
+                </div>
+                
+                  <!-- Recomendada por: <br> {movie.recommendedByFullName || 'N.N.'} @ {movie.recommendedByUsername || 'N.N.'} -->
                   <!-- TODO: Corregir formato fecha -->
                   <!-- el {new Intl.DateTimeFormat('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(movie.recommendedAt)} -->
-                </p>
+                
 
                 <!-- TODO: Agregar botón para votar -->
                 <!-- <button
@@ -165,3 +242,9 @@
 
   </div>
 </div>
+
+<style>
+  .badge {
+    color: white;
+  }
+</style>

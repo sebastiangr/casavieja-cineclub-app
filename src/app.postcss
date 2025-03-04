@@ -20,6 +20,10 @@
 	@apply w-80 p-2 bg-blue-500 text-white rounded-lg my-2 hover:bg-blue-600;
 }
 
+.btn-round {
+  @apply p-2 m-1 rounded-full;
+}
+
 .btn-signup {
   display: flex;
   justify-content: center;
@@ -63,7 +67,14 @@
 :focus-visible {
   outline: none;
 }
+.btn {
+  font-weight: bold;
+} 
 .btn.variant-filled-primary {
   color: white;
   font-weight: bold;
+}
+.btn.btn-round > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0;
+  margin-right: 0;
 }

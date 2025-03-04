@@ -20,19 +20,19 @@
 
 <!-- TODO: Dar estilos al modal de confirmación de eliminación. -->
 <div class="bg-surface-800 border-surface-700 border-[1px] p-4 m-2 max-w-sm rounded-md shadow-md">
-  <h2 class="text-lg font-bold text-center">{title}</h2>
-  <p class="mt-2 text-gray-600">{message}</p>
-  <p class="mt-2 text-gray-600">{additionalField}</p>
+  <h2 class="text-lg font-bold text-center text-primary-500">{title}</h2>
+  <p class="mt-2 text-center text-surface-200">¿{message} {additionalField}?</p>
+  <!-- <p class="mt-2 text-gray-600"></p> -->
 
   <div class="flex justify-center gap-2 mt-4">
     <button
-      class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+      class="btn variant-filled px-4 py-2"
       onclick={() => modalStore.close()}
     >
       Cancelar
     </button>
     <button
-      class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+      class="btn variant-filled-primary px-4 py-2 outline-primary-600"
       onclick={() => {
         onConfirm();
         modalStore.close();
@@ -42,3 +42,16 @@
     </button>
   </div>
 </div>
+
+<style>
+  /* .modal *:focus:not([tabindex='-1']):not(.input):not(.textarea):not(.select):not(.input-group):not(.input-group input) {
+    outline-style: solid !important;
+    outline-width: 1px !important;
+    outline-color: var(--color-primary-500) !important;
+  } */
+  :focus {
+    outline-style: solid !important;
+    outline-width: 1px !important;
+    /* outline-color: var(--color-primary-500) !important; */
+  }
+</style>

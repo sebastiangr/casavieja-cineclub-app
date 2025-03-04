@@ -3,7 +3,7 @@
 	import { tick } from "svelte";
   import { LightSwitch } from '@skeletonlabs/skeleton';
 	import { checkConnection } from "$lib/services/tmdb";
-	import { CircleChevronDown } from "lucide-svelte";
+	import { CircleChevronDown, ChevronsRight} from "lucide-svelte";
 
   let serverStatus = $state<'connected' | 'disconnected'>('disconnected');
   let dbStatus = $state<'connected' | 'disconnected'>('disconnected');  
@@ -61,8 +61,8 @@
 <div class="connection-status bg-surface-800 border-surface-700 hover:border-surface-600 border-[1px] p-4 m-2 {showConnectionStatus ? 'collapsed' : ''}">
   <!-- TODO: Cambiar a otro ícono que no confunda con un GoToTop. -->
   <div class="absolute right-0 bottom-0">    
-    <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Estado de conexiones" onclick={toggleConnectionStatus}>
-      <CircleChevronDown strokeWidth={1.25} size={26} stroke="currentColor"/>
+    <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Estado de conexiones" onclick={toggleConnectionStatus}>      
+      <ChevronsRight strokeWidth={1.25} size={26} stroke="currentColor"/>
     </button>
   </div>
   <!-- <p>@: {page.data.user?.username}</p> -->

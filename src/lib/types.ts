@@ -48,6 +48,12 @@ export interface MovieRecommendation extends Movie {
   hasVoted: boolean; // Indica si el usuario ya ha votado
 }
 
+export type Vote = {
+  id: string;
+  userId: string;
+  movieId: string;
+};
+
 export interface SearchResponse {
   results: Movie[];
   total_results: number;

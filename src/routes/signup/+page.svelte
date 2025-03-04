@@ -127,7 +127,7 @@
   }
 </script>
   
-<div class="flex flex-col items-center justify-center min-h-screen">
+<div class="flex flex-col items-center justify-center">
 
   <h1 class="text-2xl font-bold">Registro</h1>
 
@@ -162,18 +162,21 @@
       <p class="text-red-500 text-sm">{errors.fullName}</p>
     {/if}    
     
+    <!-- TODO: Al hacer tab que no seleccione el botón -->
     <div class="relative">
       <input       
         type={showPassword ? 'text' : 'password'}
         placeholder="Contraseña" 
         class="input" 
         disabled={loading} 
-        oninput={(e) => form.password = (e.currentTarget as HTMLInputElement).value} />
+        oninput={(e) => form.password = (e.currentTarget as HTMLInputElement).value}
+        />
 
       <button
         type="button"
-        class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-500"
-        onclick={() => togglePasswordVisibility('password')}>
+        class="absolute inset-y-0 right-0 px-3 flex items-center text-surface-400 hover:text-surface-300"
+        onclick={() => togglePasswordVisibility('password')}
+        tabindex="-1">
         {#if showPassword}
           <Eye strokeWidth={1.25}/>
         {:else}
@@ -195,7 +198,7 @@
 
       <button
         type="button"
-        class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-gray-500"
+        class="absolute inset-y-0 right-0 px-3 flex items-center text-surface-400 hover:text-surface-300"
         onclick={() => togglePasswordVisibility('confirmPassword')}>
         {#if showConfirmPassword}
           <Eye strokeWidth={1.25}/>
