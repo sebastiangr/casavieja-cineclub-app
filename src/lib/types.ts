@@ -16,14 +16,28 @@ export interface Message {
   };
 }
 
+// export interface Movie {
+//   id: number;
+//   title: string;
+//   overview: string;
+//   poster_path: string;
+//   release_date: string;
+//   vote_average: number;
+//   director: string;
+// }
+
 export interface Movie {
-  id: number;
+  id: string; // Cambiado a string para coincidir con el tipo en Prisma
   title: string;
-  overview: string;
   poster_path: string;
   release_date: string;
-  vote_average: number;
   director: string;
+  recommendedAt: Date; // Cambiado a Date para coincidir con el tipo en Prisma
+  recommendedBy: string;
+  recommendedByFullName: string;
+  recommendedByUsername: string;
+  votes: number; // Cambiado a number para coincidir con el tipo en Prisma
+  hasVoted: boolean; // Cambiado a boolean para coincidir con el tipo en Prisma
 }
 
 export interface MovieRecommendation extends Movie {

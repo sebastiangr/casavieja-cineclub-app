@@ -2,7 +2,7 @@
 	import Header from './../lib/components/Header.svelte';
   import '../app.postcss';
   import { LightSwitch } from '@skeletonlabs/skeleton';
-  import { initializeStores } from '@skeletonlabs/skeleton';
+  import { initializeStores, Modal } from '@skeletonlabs/skeleton';
   import ConnectionStatus from '$lib/components/ConnectionStatus.svelte';
   import { type User } from '$lib/types';
   import { userStore } from '$lib/stores/userStore';
@@ -10,8 +10,14 @@
 	import { page } from '$app/state';
 	import MenuBar from '$lib/components/MenuBar.svelte';
 
+  import ModalTest from '$lib/components/ModalTest.svelte';
+  
+
   // Inicializar stores globales de Skeleton UI
   initializeStores();
+  const modalRegistry = {
+    modalTest: { ref: ModalTest },
+  };
 
   let props = $props<{ children: any; user: User | null }>(); // 📌 Obtener los props correctamente
   console.log("🔴 Props en layout.svelte:", props); // 🔍 Verifica todo el objeto props
@@ -32,7 +38,13 @@
 
 </script>
 
+<Modal components={modalRegistry} />
+
 <Header />
+
+{#if user}
+  <MenuBar {user} />
+{/if}
 
 <div class="flex justify-center min-h-screen pt-20">
 	{@render children()}
@@ -42,4 +54,3 @@
 	<ConnectionStatus />
 </div>
 
-<MenuBar />

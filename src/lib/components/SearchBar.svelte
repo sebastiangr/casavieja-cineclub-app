@@ -7,13 +7,21 @@
   import { movieStore } from '$lib/stores/movies'; // Import the movie store
   import { getMovieDetails } from '$lib/services/tmdb'; // Import the new function
 	import { Search } from 'lucide-svelte';
+	import { userStore } from '$lib/stores/userStore';
+	import { page } from '$app/state';
+	import type { User } from '$lib/types';
 
+  // let user = page.data.user;
+  let user: User | null;
+  userStore.subscribe((value) => user = value);
+  
   let searchTerm = '';
   let error = '';
-  let recommendedBy = ''; // New variable for the recommender's name
   const loading = writable(false);
   const searchResults = writable<any[]>([]);
   
+  export let onMovieAdded: () => void;
+
   // Creamos la función debounced fuera de la query
   const debouncedSearch = debounce(async (term: string) => {
     error = '';
@@ -58,15 +66,54 @@
     debouncedSearch(input.value);
   }
 
-  // Manejador para agregar la película con recomendación
-  function addMovieWithRecommendation(movie: any) {
-    movieStore.addMovie({
-      ...movie,
-      recommendedBy,
-      recommendedAt: new Date(),
+/*************  ✨ Codeium Command 🌟  *************/
+
+  // Nueva función para agregar la película a la base de datos
+  async function addMovieToDatabase(movie: any) {
+    const userId = user?.id;
+    const userFullName = user?.fullName;
+    const username = user?.username;
+
+    console.log('Adding movie to database:', movie);
+    console.log('User actual:', user);
+    console.log('User actual ID:', userId);
+    console.log('User actual Full Name:', userFullName);
+    console.log('User actual Username:', username);
+    // const userId = user.id; // Obtener el ID del usuario que ha iniciado sesión
+    const response = await fetch('/peliculas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: movie.title, // Asegurarse de que se envíe el título
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        director: movie.director,
+        userId: userId,
+        recommendedByFullName: userFullName,
+        recommendedByUsername: username,
+      }),
     });
-    recommendedBy = ''; // Reset the input after adding
+
+    onMovieAdded?.(); // Llamar a la función onMovieAdded si está definida
+
+    if (!response.ok) {
+      throw new Error('Error al agregar la película a la base de datos');
+    }
   }
+
+
+  // TODO: Borrar
+  // movieStore Manejador para agregar la película con recomendación 
+  // function addMovieWithRecommendation(movie: any) {
+  //   movieStore.addMovie({
+  //     ...movie,
+  //     recommendedBy,
+  //     recommendedAt: new Date(),
+  //   });
+  //   recommendedBy = ''; // Reset the input after adding
+  // }
 </script>
 
 <div class="space-y-4 relative w-full md:w-[460px]">
@@ -117,11 +164,16 @@
           class="w-full px-4 py-2 flex items-center gap-4 hover:bg-gray-50 transition"
           onclick={async () => {
             const details = await getMovieDetails(movie.id);
-            addMovieWithRecommendation(details);
+            await addMovieToDatabase(details); // Llamar a la nueva función
             console.log('Movie details:', details);
-            console.log('Movie director:', details.director);
             searchTerm = ''; // Clear search term input
-            recommendedBy = ''; // Clear recommended by input
+
+            // const details = await getMovieDetails(movie.id);
+            // addMovieWithRecommendation(details);
+            // console.log('Movie details:', details);
+            // console.log('Movie director:', details.director);
+            // searchTerm = ''; // Clear search term input
+            // recommendedBy = ''; // Clear recommended by input
           }}
         >
           {#if movie.poster_path}

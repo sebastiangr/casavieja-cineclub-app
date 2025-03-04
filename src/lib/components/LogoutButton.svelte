@@ -13,7 +13,7 @@
       await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
 
       console.log("🔵 Logout exitoso, invalidando caché...");
-      invalidateAll(); // Forzar recarga de `+layout.server.ts`
+      // invalidateAll(); // Forzar recarga de `+layout.server.ts`
 
       goto('/', { replaceState: true });
     } catch (error) {

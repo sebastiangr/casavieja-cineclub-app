@@ -8,8 +8,8 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 
   console.log("🟢 locals.user en layout.server.ts:", locals.user); // Verifica qué se está recibiendo en el servidor
 
-  const user = locals.user ?? null; 
-  console.log("🔵 User enviado desde layout.server.ts:", user); // Verificar qué se está retornando
+  // const user = locals.user ?? null; 
+  // console.log("🔵 User enviado desde layout.server.ts:", user); // Verificar qué se está retornando
 
 
   // const urlActual = (await import('url')).URL;
@@ -23,5 +23,5 @@ export const load: LayoutServerLoad = async ({ locals }) => {
   // }
 
   // return { user }; // Enviar user correctamente  
-  return { user };
+  return { user: locals.user };
 };

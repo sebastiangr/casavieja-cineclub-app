@@ -16,6 +16,8 @@ model User {
   fullName  String?
 
   messages Message[] // Relación inversa: Un usuario tiene varios mensajes
+
+  Movie Movie[]
 }
 
 model Message {
@@ -25,4 +27,21 @@ model Message {
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Movie {
+  id       String   @id @default(cuid())
+  title    String
+  // overview String
+  poster_path String
+  release_date String
+  // vote_average Float
+  director String
+  recommendedAt DateTime
+  recommendedBy String
+  recommendedByFullName String
+  recommendedByUsername String
+  votes Int @default(0)
+  hasVoted Boolean @default(false)
+  user User @relation(fields: [recommendedBy], references: [id])
 }
