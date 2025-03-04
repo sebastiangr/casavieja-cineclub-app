@@ -25,9 +25,9 @@ export interface Message {
 //   vote_average: number;
 //   director: string;
 // }
-
 export interface Movie {
   id: string; // Cambiado a string para coincidir con el tipo en Prisma
+  tmdb_id: number; 
   title: string;
   poster_path: string;
   release_date: string;

@@ -31,6 +31,7 @@ model Message {
 
 model Movie {
   id       String   @id @default(cuid())
+  tmdb_id  Int
   title    String
   // overview String
   poster_path String

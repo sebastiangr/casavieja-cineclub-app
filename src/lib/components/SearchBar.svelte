@@ -4,9 +4,8 @@
   const { debounce } = pkg;
   import { searchMovies } from '$lib/services/tmdb';
   import { writable } from 'svelte/store';
-  import { movieStore } from '$lib/stores/movies'; // Import the movie store
   import { getMovieDetails } from '$lib/services/tmdb'; // Import the new function
-	import { Search } from 'lucide-svelte';
+	import { ChevronRight, Search } from 'lucide-svelte';
 	import { userStore } from '$lib/stores/userStore';
 	import { page } from '$app/state';
 	import type { User } from '$lib/types';
@@ -53,12 +52,6 @@
     }
   }, 300);
 
-  // const query = createQuery({
-  //   queryKey: ['movies', searchTerm],
-  //   queryFn: () => searchMovies(searchTerm),
-  //   enabled: searchTerm.length >= 2 // La query se ejecutará cuando searchTerm tenga 2 o más caracteres
-  // });
-
   // Manejador del input
   function handleInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -66,9 +59,8 @@
     debouncedSearch(input.value);
   }
 
-/*************  ✨ Codeium Command 🌟  *************/
-
   // Nueva función para agregar la película a la base de datos
+  // TODO: Añadir animación de carga
   async function addMovieToDatabase(movie: any) {
     const userId = user?.id;
     const userFullName = user?.fullName;
@@ -91,6 +83,7 @@
         release_date: movie.release_date,
         director: movie.director,
         userId: userId,
+        tmdb_id: movie.id,
         recommendedByFullName: userFullName,
         recommendedByUsername: username,
       }),
@@ -130,8 +123,8 @@
     />     -->
 
     <div class="relative w-full md:w-[460px] items-center">
-      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-        <Search strokeWidth={1.25} />
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-700 focus-within:text-primary-500 pointer-events-none z-10">
+        <Search strokeWidth={1.25} size={26} stroke="currentColor"/>
       </div>
       <input
         type="text"
@@ -143,37 +136,39 @@
     </div>
     
     {#if $loading}
-      <div class="absolute right-3 top-2.5">
-        <div class="animate-spin h-5 w-5 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-700 focus-within:text-primary-500 pointer-events-none z-10">
+        <div class="animate-spin h-5 w-5 border-2 border-white rounded-full border-t-transparent"></div>
       </div>
     {/if}
 
   </div>
 
   {#if error}
-    <div class="p-4 bg-red-50 text-red-600 rounded-lg">
-      {error}
+    <div class="p-4 bg-surface-700 border border-red-600 text-red-600 rounded-md text-center">      
+      <span>ERROR: {error}</span>
     </div>
   {/if}
   
+  <!-- TODO: Impedir añadir una película ya existente en la DB. -->
   <!-- RESULTS -->
   {#if $searchResults.length > 0 && searchTerm.length >= 2}
-    <div class="bg-white w-full shadow-lg rounded-md divide-y absolute z-50">
+    <div class="bg-surface-700 border-surface-600 border-[1px] w-full shadow-md rounded-md absolute z-50">
       {#each $searchResults.slice(0, 5) as movie}
         <button
-          class="w-full px-4 py-2 flex items-center gap-4 hover:bg-gray-50 transition"
+          class="group w-full px-2 py-2 flex items-center gap-4 border-surface-100 border-t-[1px] border-t-surface-600 hover:bg-surface-500 hover:border-surface-600 transition"
+          disabled={$loading}
           onclick={async () => {
-            const details = await getMovieDetails(movie.id);
-            await addMovieToDatabase(details); // Llamar a la nueva función
-            console.log('Movie details:', details);
-            searchTerm = ''; // Clear search term input
-
-            // const details = await getMovieDetails(movie.id);
-            // addMovieWithRecommendation(details);
-            // console.log('Movie details:', details);
-            // console.log('Movie director:', details.director);
-            // searchTerm = ''; // Clear search term input
-            // recommendedBy = ''; // Clear recommended by input
+            loading.set(true); // Start loading indicator
+            try {
+              const details = await getMovieDetails(movie.id);
+              await addMovieToDatabase(details); // Call the new function
+              console.log('Movie details:', details);
+              searchTerm = ''; // Clear search term input
+            } catch (err) {
+              console.error('Error adding movie:', err);
+            } finally {
+              loading.set(false); // Stop loading indicator
+            }
           }}
         >
           {#if movie.poster_path}
@@ -184,27 +179,27 @@
             />
           {:else}
             <div class="w-12 h-18 bg-gray-200 rounded flex items-center justify-center">
-              <span class="text-gray-400">Sin imagen</span>
+              <span class="text-gray-400">N/A</span>
             </div>
           {/if}
 
           <div class="flex-1 text-left">
-            <h3 class="font-medium">{movie.title}</h3>
-            <p class="text-sm text-gray-500">
+            <h3 class="font-bold text-primary-500">{movie.title}</h3>
+            <p class="text-sm text-surface-300">
               {new Date(movie.release_date).getFullYear()}
             </p>
-
-            <!-- Director - mucho más lenta la precarga -->
-            <!-- <p class="text-sm text-gray-500">
-              Director: {movie.director || 'Desconocido'}
-            </p> -->
           </div>
+
+          <div class="text-primary-700 group-hover:text-primary-500">
+            <ChevronRight strokeWidth={1.25} size={26} stroke="currentColor"/>
+          </div>
+
         </button>
       {/each}
     </div>
   {:else if searchTerm.length >= 2 && !$loading}
-  <div class="bg-white shadow-lg rounded-lg divide-y absolute z-50">
-    <p class="text-center text-gray-500 p-4">
+  <div class="bg-surface-700 border-surface-600 border-[1px] w-full shadow-md rounded-md absolute z-50">
+    <p class="text-center text-primary-500 p-4">
       No se encontraron resultados para "{searchTerm}"
     </p>
   </div>    
@@ -215,5 +210,4 @@
   .search-input {
     padding-left: 50px;
   }
-
 </style>

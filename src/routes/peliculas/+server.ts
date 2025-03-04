@@ -4,7 +4,7 @@ import { prisma } from '$lib/prisma'; // Asegúrate de que la ruta sea correcta
 
 export const POST: RequestHandler = async ({ request, locals }) => {
   if (!locals.user) return json({ error: 'No autorizado' }, { status: 401 });
-  const { title, poster_path, release_date, director } = await request.json();
+  const { title, poster_path, release_date, director, tmdb_id } = await request.json();
 
   try {
     const newMovie = await prisma.movie.create({
@@ -13,6 +13,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         poster_path,
         release_date,
         director,
+        tmdb_id,
         recommendedAt: new Date(),
         recommendedBy: locals.user.userId,
         recommendedByFullName: locals.user.fullName,

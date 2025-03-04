@@ -10,13 +10,13 @@
 	import { page } from '$app/state';
 	import MenuBar from '$lib/components/MenuBar.svelte';
 
-  import ModalTest from '$lib/components/ModalTest.svelte';
+	import ModalDelete from '$lib/components/ModalDelete.svelte';
   
 
   // Inicializar stores globales de Skeleton UI
   initializeStores();
   const modalRegistry = {
-    modalTest: { ref: ModalTest },
+    modalDelete: { ref: ModalDelete },
   };
 
   let props = $props<{ children: any; user: User | null }>(); // 📌 Obtener los props correctamente

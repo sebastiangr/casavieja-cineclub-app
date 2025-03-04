@@ -59,7 +59,7 @@
 <!-- <div class="connection-status {showConnectionStatus ? 'collapsed' : ''}" class:show={showConnectionStatus}> -->
 <!-- <div class="connection-status {showConnectionStatus ? '' : 'collapsed'}"> -->
 <div class="connection-status bg-surface-800 border-surface-700 hover:border-surface-600 border-[1px] p-4 m-2 {showConnectionStatus ? 'collapsed' : ''}">
-  <!-- TODO: Hacer que el botón abra y cierre todo el bloque de connection-status -->
+  <!-- TODO: Cambiar a otro ícono que no confunda con un GoToTop. -->
   <div class="absolute right-0 bottom-0">    
     <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Estado de conexiones" onclick={toggleConnectionStatus}>
       <CircleChevronDown strokeWidth={1.25} size={26} stroke="currentColor"/>
