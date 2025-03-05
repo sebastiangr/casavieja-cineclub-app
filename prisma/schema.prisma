@@ -15,10 +15,9 @@ model User {
   createdAt DateTime @default(now())
   fullName  String?
 
-  messages Message[] // Relación inversa: Un usuario tiene varios mensajes
-
-  Movie Movie[]
-  votes Vote[]
+  messages Message[] 
+  movies   Movie[]
+  votes    Vote[]
 }
 
 model Message {
@@ -31,28 +30,31 @@ model Message {
 }
 
 model Movie {
-  id       String   @id @default(cuid())
-  tmdb_id  Int
-  title    String
-  // overview String
-  poster_path String
-  release_date String
-  // vote_average Float
-  director String
-  recommendedAt DateTime
-  recommendedBy String
-  recommendedByFullName String
-  recommendedByUsername String
-  votes Int @default(0)
-  hasVoted Boolean @default(false)
-  user User @relation(fields: [recommendedBy], references: [id])
+  id                     String   @id @default(cuid())
+  tmdb_id                Int      @unique
+  title                  String
+  poster_path            String
+  release_date           String
+  director               String
+  recommendedAt          DateTime
+  recommendedBy          String
+  recommendedByFullName  String
+  recommendedByUsername  String
+  votes                  Int      @default(0)
+
+  user User @relation(fields: [recommendedBy], references: [id], onDelete: Cascade)
   voteRelationships Vote[]
 }
 
+
 model Vote {
-  id       String   @id @default(cuid())
-  userId   String
-  movieId  String
-  user     User     @relation(fields: [userId], references: [id])
-  movie    Movie    @relation(fields: [movieId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String
+  movieId   String
+  createdAt DateTime @default(now())
+
+  user   User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie  Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId]) // Garantiza que un usuario solo pueda votar una vez por película
 }

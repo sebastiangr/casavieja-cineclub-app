@@ -79,7 +79,7 @@
     </span>
   </div>
   <div class="status-item status_aws">
-    <span class="label">AWS DB:</span>
+    <span class="label">Neon DB:</span>
     <span class="indicator {dbStatus === 'connected' ? 'text-green-500' : 'text-red-500'}">
       {dbStatus}
     </span>

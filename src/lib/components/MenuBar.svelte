@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { userStore } from "$lib/stores/userStore";
+	import type { User } from "$lib/types";
 	import { Clapperboard, MessageSquare, UserRound, Star, History } from "lucide-svelte";
 
-  let { user } = $props();
+  let user: User | null;
+  userStore.subscribe((value) => user = value);
+  // let { user } = $props();
   
 </script>
 

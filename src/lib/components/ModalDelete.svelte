@@ -19,7 +19,7 @@
 </script>
 
 <!-- TODO: Dar estilos al modal de confirmación de eliminación. -->
-<div class="bg-surface-800 border-surface-700 border-[1px] p-4 m-2 max-w-sm rounded-md shadow-md">
+<div class="bg-surface-900 border-surface-700 border-[1px] p-4 m-2 max-w-sm rounded-md shadow-md">
   <h2 class="text-lg font-bold text-center text-primary-500">{title}</h2>
   <p class="mt-2 text-center text-surface-200">¿{message} {additionalField}?</p>
   <!-- <p class="mt-2 text-gray-600"></p> -->

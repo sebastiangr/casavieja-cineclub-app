@@ -10,7 +10,7 @@
   userStore.subscribe((value) => user = value); // Reactividad automática
 </script>
 
-<header class="fixed flex justify-center items-center w-full h-20 z-50">
+<header class="fixed flex justify-center items-center bg-surface-900 w-full h-20 z-50">
 
   <!-- TODO: Redefine user card -->
   <UserCard />
@@ -38,7 +38,7 @@
   {/if} -->
 
   {#if user}
-    <h1>Bienvenido, {user.fullName}</h1>
+    <h1 class="text-2xl font-bold">Bienvenido, {user.fullName}</h1>
   {/if}
 
   <!-- {#if user}
