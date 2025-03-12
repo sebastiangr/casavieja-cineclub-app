@@ -13,6 +13,8 @@ import bcrypt from 'bcryptjs';
 import { signupSchema } from '$lib/validations';
 import { json } from '@sveltejs/kit';
 
+// TODO: Hay que validar que fullName y username no pueda ser solo espacios "___".
+
 /** @type {RequestHandler} */
 export const POST: RequestHandler = async ({ request }) => {
   try {

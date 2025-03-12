@@ -14,8 +14,8 @@
   <!-- <div class="bg-primary-500 fixed flex flex-col justify-center left-1/2 transform -translate-x-1/2 w-auto align-bottom h-20 pl-4 pr-4 -mt-24 z-50 rounded-md"> -->
   <div class="fixed left-1/2 transform -translate-x-1/2 bottom-0 flex justify-center items-center w-full z-50">
 
-    <div class="flex justify-center bg-primary-500 items-center h-20 pl-0 pr-0 mb-0 rounded-none md:pl-4 md:pr-4 md:mb-4 md:rounded-md w-full md:w-auto">
-      <ul class="flex gap-4">
+    <div class="bg-primary-500 flex items-center h-20 pl-0 pr-0 mb-0 rounded-none md:pl-4 md:pr-4 md:mb-4 md:rounded-md w-full md:w-auto">
+      <ul class="flex justify-around items-center w-full gap-4">
         <!-- TODO: Es necesario un inicio? -->
         <!-- <li>
           <button class="group flex flex-col items-center justify-center">

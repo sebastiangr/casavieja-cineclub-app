@@ -4,6 +4,9 @@ import { prisma } from '$lib/prisma'; // Asegúrate de que la ruta sea correcta
 
 export const POST: RequestHandler = async ({ request, locals }) => {
   if (!locals.user) return json({ error: 'No autorizado' }, { status: 401 });
+  // TODO: Recuperar más datos de película, géneros, actores principales, productor-director, premios.
+  // TODO: Que a partir de los datos obtenidos de TMDB se busque el mismo item en la DB de iMDB y Rotten Tomatoes.
+  
   const { title, poster_path, release_date, director, tmdb_id } = await request.json();
 
   try {
