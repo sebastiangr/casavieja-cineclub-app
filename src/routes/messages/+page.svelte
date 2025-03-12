@@ -63,7 +63,9 @@
   <!-- LISTA MENSAJES -->
   <div class=" items-center mt-5">
     <h1 class="text-2xl font-bold text-center mb-5">Mensajes Públicos</h1>
-    <span class="flex text-md text-surface-400 items-center justify-center text-center p-5 mb-5  mr-10 ml-10">Deja aquí un comentario acerca de qué funcionalidad quieres ver, alguna mejora, error, bug, o simplemente deja un saludo.</span>
+    <span class="flex text-md text-surface-400 items-center justify-center text-center p-5 mb-5  mr-10 ml-10">
+      Deja un mensaje acerca de qué nuevas funcionalidades quieres ver, si encontraste un error, bug, si tienes alguna sugerencia o simplemente deja un saludo :).      
+    </span>
 
     {#if loading}
       <!-- Mostrar preloader mientras se carga el listado -->

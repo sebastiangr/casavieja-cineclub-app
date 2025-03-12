@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { TriangleAlert } from 'lucide-svelte';
 
   // let user = userStore; // ✅ Obtener usuario autenticado
   let user = page.data.user;
@@ -9,6 +10,11 @@
 <div class="flex flex-col items-center justify-center">
 
   
+  <div class="text-primary-500 text-center flex flex-col items-center gap-2 mb-10">
+    <TriangleAlert  strokeWidth={1.75} size={40} stroke="currentColor"/>
+    <span class="text-lg font-bold">¡Sección en construcción!</span>
+  </div>
+
   <h1>DATOS DE USUARIO</h1>
 
 

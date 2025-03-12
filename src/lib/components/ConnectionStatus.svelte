@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PUBLIC_APP_VERSION } from "$env/static/public";
 	import { page } from "$app/state";
 	import { tick } from "svelte";
   import { LightSwitch } from '@skeletonlabs/skeleton';
@@ -67,7 +68,7 @@
   </div>
   
   <div class="status-item version">
-    <span class="label text-surface-400">v0.8.4</span>
+    <span class="label text-surface-400">v{PUBLIC_APP_VERSION}</span>
   </div>
   <div class="status-item status_tmdb">
     <span class="label">TMDB API:</span>
