@@ -293,7 +293,7 @@
                   
                 </div>
                 
-                <span class="mb-1 text-sm text-surface-300 text-center">VOTOS:</span>
+                <span class="mb-1 text-sm text-surface-300 font-semibold text-center">VOTOS:</span>
 
                 <div class="flex flex-row justify-between align-middle items-center">
                   <button
@@ -364,6 +364,8 @@
 <style>
   .badge {
     color: white !important;
+    font-weight: 300;
+    letter-spacing: 0.5px;
   }
   .btn-filter-active {
     color: rgba(var(--color-primary-500));

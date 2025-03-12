@@ -13,7 +13,9 @@
 <header class="fixed flex justify-center items-center bg-surface-900 w-full h-20 z-50">
 
   <!-- TODO: Redefine user card -->
-  <UserCard />
+  {#if user}
+    <UserCard />
+  {/if}
 
   <!-- {#if user}
     <div class="hidden md:flex items-center mr-4  ">

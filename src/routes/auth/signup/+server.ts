@@ -21,6 +21,14 @@ export const POST: RequestHandler = async ({ request }) => {
     // TODO: Añadir console.logs para validar que los datos se están recibiendo correctamente
     const { email, username, fullName, password } = await request.json();
 
+    // Validar que username y fullName no sean solo espacios en blanco
+    if (/^\s*$/.test(username)) {
+      return new Response(JSON.stringify({ error: 'El nombre de usuario no puede estar compuesto solo por espacios.' }), { status: 400 });
+    }
+    if (/^\s*$/.test(fullName)) {
+      return new Response(JSON.stringify({ error: 'El nombre completo no puede estar compuesto solo por espacios.' }), { status: 400 });
+    }
+
     // Validar los datos usando Zod
     signupSchema.parse({ email, username, fullName, password });
 
