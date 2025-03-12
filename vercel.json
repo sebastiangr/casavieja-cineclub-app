@@ -3,7 +3,7 @@
   "buildCommand": "npx prisma generate && npm run build",
   "functions": {
     "api/*": {
-      "runtime": "nodejs18.x",
+      "runtime": "nodejs20.x",
       "includeFiles": "node_modules/.prisma/**/*"
     }
   },
