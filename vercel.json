@@ -3,7 +3,7 @@
   "buildCommand": "npx prisma generate && npm run build",
   "functions": {
     "api/*": {
-      "runtime": "nodejs20.x",
+      "runtime": "@vercel/node@2.x",
       "includeFiles": "node_modules/.prisma/**/*"
     }
   },
