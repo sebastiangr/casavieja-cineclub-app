@@ -24,24 +24,46 @@ export const PUT: RequestHandler = async ({ request, locals }) => {
         where: { id: existingVote.id }
       });
 
-      await prisma.movie.update({
+      // await prisma.movie.update({
+      //   where: { id: movieId },
+      //   data: { votes: { decrement: 1 } }
+      // });
+
+      const updatedMovie = await prisma.movie.update({
         where: { id: movieId },
-        data: { votes: { decrement: 1 } }
+        data: { votes: { decrement: 1 } },
+        select: { votes: true }
       });
 
-      return json({ message: 'Voto eliminado', hasVoted: false });
+      // return json({ message: 'Voto eliminado', hasVoted: false });
+      return json({ 
+        message: 'Voto eliminado', 
+        hasVoted: false,
+        votes: updatedMovie.votes
+      });
     } else {
       // Si no ha votado, agregar el voto y sumar 1 al contador de votos
       await prisma.vote.create({
         data: { userId, movieId }
       });
 
-      await prisma.movie.update({
+      // await prisma.movie.update({
+      //   where: { id: movieId },
+      //   data: { votes: { increment: 1 } }
+      // });
+
+      // return json({ message: 'Voto añadido', hasVoted: true });
+      const updatedMovie = await prisma.movie.update({
         where: { id: movieId },
-        data: { votes: { increment: 1 } }
+        data: { votes: { increment: 1 } },
+        select: { votes: true }
       });
 
-      return json({ message: 'Voto añadido', hasVoted: true });
+      return json({ 
+        message: 'Voto añadido', 
+        hasVoted: true,
+        votes: updatedMovie.votes
+      });      
     }
   } catch (error) {
     console.error('Error al procesar el voto:', error);

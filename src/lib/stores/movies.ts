@@ -37,3 +37,8 @@
 // }
 
 // export const movieStore = createMovieStore();
+
+import { writable } from 'svelte/store';
+import type { Movie } from '$lib/types';
+
+export const moviesStore = writable<Movie[]>([]);

@@ -28,7 +28,7 @@
    * Función para manejar el envío del formulario de login.
    * Primero se validan los campos del formulario. Si no son válidos, se muestra un mensaje de error y se sale.
    * Si son válidos, se hace una petición POST a /auth/login con los datos del formulario.
-   * Si la petición es exitosa (200), se guarda el token en localStorage y se redirige a /dashboard.
+   * Si la petición es exitosa (200), se guarda el token en localStorage y se redirige a /peliculas.
    * Si la petición falla (401, 400, etc.), se muestra un mensaje de error y se sale.
    * En caso de error en el servidor, se muestra un mensaje de error y se sale.
    * @param {SubmitEvent} event - Evento de envío del formulario
