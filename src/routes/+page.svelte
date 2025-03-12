@@ -56,7 +56,7 @@
         localStorage.setItem('token', data.token);   
         
         await invalidateAll(); // Recargar `+layout.server.ts` para obtener `locals.user`
-        goto('/dashboard');
+        goto('/peliculas');
       } else {
         mensaje = data.error;        
       }

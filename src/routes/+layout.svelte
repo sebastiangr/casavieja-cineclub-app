@@ -27,13 +27,18 @@
   let user = $state(props.data.user); // 📌 Hacer user reactivo
   console.log("🟡 User en layout.svelte (Corregido):", user); // 🔍 Ahora debería mostrar correctamente el usuario
 
+  // Estado reactivo para controlar la visibilidad de MenuBar
+	let showMenuBar = $state(true);
+
   function showUser() {
     console.log("Show user:", page.data.user);
   }
 
   $effect(() => {
     userStore.set(page.data.user); // ✅ Mantener el store actualizado
-    console.log("🟡 userStore en layout:", userStore);
+    // console.log("🟡 userStore en layout:", userStore);
+    showMenuBar = !(page.url.pathname === '/' || page.url.pathname === '/signup');
+    console.log("Layout actualizado!!!");
   });  
 
 </script>
@@ -42,15 +47,15 @@
 
 <Header />
 
-{#if user}
-  <MenuBar {user} />
+{#if showMenuBar}
+  <MenuBar />
 {/if}
 
 <div class="flex justify-center min-h-screen pt-20">
 	{@render children()}
 </div>
 
-<div class="absolute bottom-0 left-0 p-4">
+<!-- <div class="absolute p-4 top-0 right-0 md:bottom-0 md:left-0"> -->
 	<ConnectionStatus />
-</div>
+<!-- </div> -->
 

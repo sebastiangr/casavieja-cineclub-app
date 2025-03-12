@@ -4,16 +4,17 @@
 	import { LightSwitch } from '@skeletonlabs/skeleton';
   import { LogOut } from 'lucide-svelte';
 
-  let loading = false; // Estado de carga
+  let loading = false;
 
   async function logout() {
-    loading = true; // Establecer carga en verdadero
+    loading = true;
     try {
       console.log("🟢 Enviando solicitud de logout...");
       await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
 
       console.log("🔵 Logout exitoso, invalidando caché...");
       // invalidateAll(); // Forzar recarga de `+layout.server.ts`
+      invalidateAll();
 
       goto('/', { replaceState: true });
     } catch (error) {

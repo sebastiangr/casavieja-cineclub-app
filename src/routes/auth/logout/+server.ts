@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types';
 import { serialize } from 'cookie';
 import { json } from '@sveltejs/kit';
+import { userStore } from '$lib/stores/userStore';
 
 export const POST: RequestHandler = async () => {
   console.log("🟢 Cerrando sesión..."); // Verificar que la solicitud llega
@@ -14,6 +15,9 @@ export const POST: RequestHandler = async () => {
   });
   
   console.log("🔴 Cookie de sesión eliminada:", cookie);
+
+  // Clean userStore
+  userStore.set(null);
 
   return json({ message: 'Sesión cerrada' }, { // No redirigir aquí
     status: 200,

@@ -165,29 +165,37 @@
 
 
   <hr class="w-full border border-gray-300 my-2">
-  <div class="filter-wrapper flex justify-end items-end">
-    <!-- <span>Ordenar por:</span> -->
-    <button class="{sortBy === 'votes' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
-      color="red" aria-label="Más votadas"
-      onclick={() => sortBy = 'votes'} >
-      <ListOrdered  strokeWidth={1.25} size={26} stroke="currentColor"/>
-      <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
-      -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[100px] z-10">Más votadas</span>
-    </button>
-    <button class="{sortBy === 'title' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
-      color="red" aria-label="Orden alfabético"
-      onclick={() => sortBy = 'title'} >
-      <ArrowDownAZ strokeWidth={1.25} size={26} stroke="currentColor"/>
-      <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
-      -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[120px] z-10">Orden alfabético</span>
-    </button>
-    <button class="{sortBy === 'recent' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
-      color="red" aria-label="Más recientes"
-      onclick={() => sortBy = 'recent'} >
-      <CalendarArrowDown strokeWidth={1.25} size={26} stroke="currentColor"/>
-      <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
-      -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[100px] z-10">Más recientes</span>
-    </button>
+
+  <div class="filter-wrapper flex justify-between items-center ">
+
+    <div class="flex items-center">
+      <span class="text-surface-400">Orden: {sortBy === 'recent' ? 'Más recientes' : sortBy === 'title' ? 'Alfabético' : 'Más votadas'}</span>
+    </div>
+
+    <div class="flex">    
+      <button class="{sortBy === 'votes' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
+        color="red" aria-label="Más votadas"
+        onclick={() => sortBy = 'votes'} >
+        <ListOrdered  strokeWidth={1.25} size={26} stroke="currentColor"/>
+        <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
+        -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[100px] z-10">Más votadas</span>
+      </button>
+      <button class="{sortBy === 'title' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
+        color="red" aria-label="Orden alfabético"
+        onclick={() => sortBy = 'title'} >
+        <ArrowDownAZ strokeWidth={1.25} size={26} stroke="currentColor"/>
+        <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
+        -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[120px] z-10">Orden alfabético</span>
+      </button>
+      <button class="{sortBy === 'recent' ? 'btn-filter-active' : 'btn-filter'} flex relative p-1 m-1 group text-primary-800 rounded-full hover:text-primary-500"
+        color="red" aria-label="Más recientes"
+        onclick={() => sortBy = 'recent'} >
+        <CalendarArrowDown strokeWidth={1.25} size={26} stroke="currentColor"/>
+        <span class="group-hover:opacity-100 transition-opacity bg-surface-700 p-1 text-sm text-primary-500 rounded-md absolute left-1/2 
+        -translate-x-1/2 translate-y-full opacity-0 mt-2 mx-auto w-[100px] z-10">Más recientes</span>
+      </button>
+    </div>
+
   </div>
 
   <div class="space-y-4 pt-4">

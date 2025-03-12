@@ -8,7 +8,7 @@
   let serverStatus = $state<'connected' | 'disconnected'>('disconnected');
   let dbStatus = $state<'connected' | 'disconnected'>('disconnected');  
   let tmdbStatus = $state<string | null>(null); 
-  let showConnectionStatus = $state<boolean>(false);
+  let showConnectionStatus = $state<boolean>(true);
 
   async function checkServerStatus() {
     try {
@@ -58,14 +58,17 @@
 
 <!-- <div class="connection-status {showConnectionStatus ? 'collapsed' : ''}" class:show={showConnectionStatus}> -->
 <!-- <div class="connection-status {showConnectionStatus ? '' : 'collapsed'}"> -->
-<div class="connection-status bg-surface-800 border-surface-700 hover:border-surface-600 border-[1px] p-4 m-2 {showConnectionStatus ? 'collapsed' : ''}">
+<div class="connection-status bg-surface-800 border-surface-700 hover:border-surface-600 border-[1px] p-4 m-2 {showConnectionStatus ? 'collapsed' : ''} z-50">
   <!-- TODO: Cambiar a otro ícono que no confunda con un GoToTop. -->
   <div class="absolute right-0 bottom-0">    
     <button class="btn-showStatus text-primary-700 hover:text-primary-500" title="Estado de conexiones" onclick={toggleConnectionStatus}>      
       <ChevronsRight strokeWidth={1.25} size={26} stroke="currentColor"/>
     </button>
   </div>
-  <!-- <p>@: {page.data.user?.username}</p> -->
+  
+  <div class="status-item version">
+    <span class="label text-surface-400">v0.8.4</span>
+  </div>
   <div class="status-item status_tmdb">
     <span class="label">TMDB API:</span>
     <span class="indicator {tmdbStatus === 'connected' ? 'text-green-500' : 'text-red-500'}">
@@ -84,7 +87,6 @@
       {dbStatus}
     </span>
   </div>
-    <!-- TODO: Reubicar este switch -->
 
 </div>
 
@@ -114,18 +116,6 @@
     transform: rotate(180deg);
   }
 
-
-
-
-  /* .connection-status.show {
-    opacity: 1;
-  } */
-
-  /* .connection-status:not(.show) {
-    opacity: 0;
-    pointer-events: none;
-  } */
-
   .status-item {
     align-items: center;
     gap: 0.5rem;
@@ -135,21 +125,15 @@
     text-transform: capitalize;
   }
 
-  .status_tmdb, .status_server, .status_aws {
+  .version, .status_tmdb, .status_server, .status_aws {
     display: flex;  
   }
 
+  .collapsed .version,
   .collapsed .status_tmdb,
   .collapsed .status_server,
   .collapsed .status_aws {    
     display: none;    
   }
 
-  /* .indicator.connected {
-    color: #4ade80;
-  }
-
-  .indicator.disconnected {
-    color: #f87171;
-  } */
 </style>

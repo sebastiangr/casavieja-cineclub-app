@@ -37,8 +37,9 @@
     </button>
   {/if} -->
 
+  <!-- TODO: Cambiar por logo -->
   {#if user}
-    <h1 class="text-2xl font-bold">Bienvenido, {user.fullName}</h1>
+    <h1 class="hidden sm:block text-lg font-bold md:text-2xl">Bienvenido, {user.fullName}</h1>
   {/if}
 
   <!-- {#if user}

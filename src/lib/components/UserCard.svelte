@@ -9,7 +9,7 @@
   userStore.subscribe((value) => user = value); // Reactividad automática
 
   function userInfo() {
-    goto("/messages");
+    goto("/usuario");
   }
 
 </script>
@@ -19,8 +19,8 @@
     {#if user}
       <UserRound strokeWidth={1.25} size={26} stroke="currentColor"/>            
       <span class="overflow-hidden max-w-0 opacity-0 group-hover:max-w-[100px] group-hover:opacity-100 transition-all duration-300 group-hover:mr-2">
-        <!-- {user.fullName} / -->
-        @{user.username}
+        <!-- {user.fullName} /  -->
+        @{user.username} 
       </span>          
     {:else}
       <UserRound strokeWidth={1.25} size={26} stroke="currentColor"/>    

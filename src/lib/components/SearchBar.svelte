@@ -130,7 +130,7 @@
         type="text"
         value={searchTerm}
         oninput={handleInput}
-        placeholder="Buscar películas..."
+        placeholder="Buscar película..."
         class="search-input input"
       />
     </div>
