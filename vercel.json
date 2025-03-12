@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "buildCommand": "prisma generate && npm run build",
+  "functions": {
+    "api/*": {
+      "runtime": "nodejs18.x",
+      "includeFiles": "node_modules/.prisma/**/*"
+    }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "env": {
+    "DATABASE_URL": "@database_url"
+  }
+}
