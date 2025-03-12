@@ -1,12 +1,4 @@
 {
   "version": 2,
-  "buildCommand": "npx prisma generate && npm run build",
-  "functions": {
-    "api/*": {
-      "includeFiles": "node_modules/.prisma/**/*"
-    }
-  },
-  "routes": [
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
+  "buildCommand": "npx prisma generate && npm run build"
 }
