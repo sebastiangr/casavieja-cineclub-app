@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate && npm run build",
+  "buildCommand": "npx prisma generate && npm run build",
   "functions": {
     "api/*": {
       "runtime": "nodejs18.x",
@@ -9,8 +9,5 @@
   },
   "routes": [
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  ]
 }
