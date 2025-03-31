@@ -33,8 +33,11 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 };
 
 export async function GET() {
-  try {
+  try {    
+    const startTime = performance.now();
     const movies = await prisma.movie.findMany(); // Obtener todas las películas
+    const endTime = performance.now();
+    console.log(`Tiempo de ejecución GET movies: ${endTime - startTime}ms`);    
     return json(movies);
   } catch (error) {
     console.error('Error al cargar las películas:', error);

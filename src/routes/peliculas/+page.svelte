@@ -241,7 +241,7 @@
       {#if loading}
       <!-- Mostrar preloader mientras se carga el listado -->
         <div class="flex flex-col items-center justify-center mb-5">
-          <!-- <span class="mb-2">Cargando listado...</span> -->
+          <span class="mb-2">Cargando listado...</span>
           <div class="loader big"></div>
         </div>
       {:else}    
