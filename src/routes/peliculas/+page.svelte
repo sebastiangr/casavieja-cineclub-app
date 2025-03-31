@@ -21,7 +21,8 @@
   let movies = $state<Movie[]>([]);
   moviesStore.subscribe(value => movies = value);
 
-  let checkMoviesLength = $state(false);
+  // Inicializamos checkMoviesLength como null para indicar que aún no sabemos si hay películas o no
+  let moviesCount = $state<number>(0);
 
   let sortBy = $state('recent'); // Opciones: 'title', 'votes', 'recent'
 
@@ -43,48 +44,88 @@
   //   console.log('Finished fetching movies');
   // }
 
+  // Nuevo: Almacena los IDs de películas votadas por el usuario
+  let votedMovieIds = $state<Set<string>>(new Set());
+    
+  // OPTIMIZADO: Obtener todas las películas votadas en una sola llamada
+  async function fetchUserVotedMovies() {
+    try {
+      const response = await fetch('/api/user-votes');
+      if (!response.ok) {
+        throw new Error(`Error fetching user votes: ${response.status}`);
+      }
+      const data = await response.json();
+      // Convertir el array de IDs a un Set para búsquedas O(1)
+      votedMovieIds = new Set(data.votedMovieIds);
+      return votedMovieIds;
+    } catch (error) {
+      console.error('Error fetching user votes:', error);
+      return new Set<string>();
+    }
+  }  
 
   // NEW FETCHMOVIES
   async function fetchMovies() {
     console.log('Fetching movies...');
     loading = true;
+    moviesCount = 0;
     
-    const response = await fetch('/peliculas');
-    console.log('Movies response:', response);
-    const newMovies = await response.json();
-    console.log('Movies JSONED:', newMovies);
-    // Update hasVoted status for each movie
-    console.time('CheckIfVoted Time');
-    for (let movie of newMovies) {
-      movie.hasVoted = await checkIfVoted(movie.id);
+    try {
+      // Primero obtenemos los IDs de películas votadas por el usuario
+      await fetchUserVotedMovies();
+      
+      // Luego obtenemos las películas
+      const response = await fetch('/peliculas');
+      console.log('Movies response:', response);
+
+      if (!response.ok) {
+        console.error('Error fetching movies:', response.status);
+        throw new Error(`Error fetching movies: ${response.status}`);        
+      }
+
+      const newMovies = await response.json();
+      console.log('Movies JSONED:', newMovies);
+
+      // Update hasVoted status for each movie
+      // console.time('CheckIfVoted Time');
+      // for (let movie of newMovies) {
+      //   console.time(`CheckIfVoted for movie ${movie.id}`);
+      //   movie.hasVoted = await checkIfVoted(movie.id);
+      //   console.timeEnd(`CheckIfVoted for movie ${movie.id}`);
+      // }
+      // console.timeEnd('CheckIfVoted Time');
+      // console.log('Movies with hasVoted:', newMovies);
+
+      // Ahora asignamos hasVoted basado en el Set de votedMovieIds (operación O(1))
+      for (let movie of newMovies) {
+        movie.hasVoted = votedMovieIds.has(movie.id);
+      }
+      console.log('Movies with hasVoted:', newMovies);
+
+      // Update the store
+      moviesStore.set(newMovies);
+      console.log('Movies Store:', moviesStore);      
+
+      // Actualizamos moviesCount con el número exacto de película
+      moviesCount = newMovies.length;
+      console.log('More than one movie:', moviesCount);      
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      // En caso de error, establecemos checkMoviesLength a false
+      moviesCount = 0;
+    } finally {
+      // Siempre establecemos loading a false al finalizar
+      loading = false;
+      console.log('Finished fetching movies');
     }
-    console.timeEnd('CheckIfVoted Time');
-    console.log('Movies with hasVoted:', newMovies);
-
-    // Update the store
-    moviesStore.set(newMovies);
-    console.log('Movies Store:', moviesStore);
-    checkMoviesLength = newMovies.length > 0;
-    console.log('More than one movie:', checkMoviesLength);
-    loading = false;
-    console.log('Finished fetching movies');
-    // movies = await response.json();
-
-    // Verificar si el usuario ha votado en cada película
-    // for (let movie of movies) {
-    //   movie.hasVoted = await checkIfVoted(movie.id);
-    // }
-
-    // checkMoviesLength = movies.length > 0;
-    // loading = false;
   }
 
-  // CHEK IF VOTED
-  async function checkIfVoted(movieId: string) {
-    const response = await fetch(`/api/check-vote?movieId=${movieId}`);
-    const data = await response.json();
-    return data.hasVoted;
-  }
+  // CHECK IF VOTED
+  // async function checkIfVoted(movieId: string) {
+  //   const response = await fetch(`/api/check-vote?movieId=${movieId}`);
+  //   const data = await response.json();
+  //   return data.hasVoted;
+  // }
 
   async function confirmDelete(movieId: string) {
     // Eliminar la película
@@ -190,7 +231,6 @@
     <SearchBar onMovieAdded={handleMovieAdded} />
   </div>
 
-  <!-- TODO: Añadir barra de filtros -->
   <!-- TODO: Cambiar estilos card. -->
   <!-- TODO: ¿Implementar la card como componente? -->
 
@@ -238,134 +278,90 @@
   </div>
 
   <div class="space-y-4 pt-4">
-
-    {#if checkMoviesLength}
-
-      <!-- {#if loading_vote}
+    <!-- Mostrar preloader mientras se carga el listado -->
+    {#if loading}
+      <div class="flex flex-col items-center justify-center mb-5">
+        <span class="mb-2">Cargando listado...</span>
         <div class="loader big"></div>
-      {/if} -->
+      </div>
+    <!-- Si no está cargando y hay películas, mostrarlas -->
+    {:else if moviesCount > 0}   
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        {#each sortedMovies as movie}
+          <div class="bg-surface-700 rounded-lg shadow-md overflow-hidden relative border-surface-600 border-[1px] hover:border-primary-500 hover:border-[1px] duration-300 ease-in-out">
 
+            <!-- Botón de eliminar, sólo visible para el usuario que la agregó -->
+            {#if movie.recommendedBy === user.userId}                      
+              <button class="absolute top-0 right-0 flex items-center p-1 m-1 group opacity-80 hover:opacity-100 bg-surface-800 text-primary-700 rounded-full hover:text-primary-500"
+                onclick={() => openDeleteModal(movie)} color="red" aria-label="Eliminar">
+                <X strokeWidth={1.25} size={26} stroke="currentColor"/>
+              </button>
+            {/if}
 
-      {#if loading}
-      <!-- Mostrar preloader mientras se carga el listado -->
-        <div class="flex flex-col items-center justify-center mb-5">
-          <span class="mb-2">Cargando listado...</span>
-          <div class="loader big"></div>
-        </div>
-      {:else}    
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-          <!-- {#each movies.reverse() as movie} -->
-          <!-- {#each sortMovies() as movie} -->
-          {#each sortedMovies as movie}
-            <div class="bg-surface-700 rounded-lg shadow-md overflow-hidden relative border-surface-600 border-[1px] hover:border-primary-500 hover:border-[1px] duration-300 ease-in-out">
-
-              <!-- Botón de eliminar, sólo visible para el usuario que la agregó -->
-              {#if movie.recommendedBy === user.userId}                      
-                <button class="absolute top-0 right-0 flex items-center p-1 m-1 group opacity-80 hover:opacity-100 bg-surface-800 text-primary-700 rounded-full hover:text-primary-500"
-                  onclick={() => openDeleteModal(movie)} color="red" aria-label="Eliminar">
-                  <X strokeWidth={1.25} size={26} stroke="currentColor"/>
-                </button>
+            <a href={`https://www.themoviedb.org/movie/${movie.tmdb_id}`} target="_blank" rel="noopener noreferrer">
+              {#if movie.poster_path}
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  class="w-full h-96 object-cover"
+                />
               {/if}
+            </a>
 
-              <a href={`https://www.themoviedb.org/movie/${movie.tmdb_id}`} target="_blank" rel="noopener noreferrer">
-                {#if movie.poster_path}
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                    alt={movie.title}
-                    class="w-full h-96 object-cover"
-                  />
-                {/if}
-              </a>
+            <div class="flex flex-col justify-around pr-4 pl-4 pb-4 pt-0">
 
-              <div class="flex flex-col justify-around pr-4 pl-4 pb-4 pt-0">
+              <div class="text-center mb-2 -mt-[10px]">
+                <span class="badge variant-filled-primary rounded">{movie.recommendedByFullName || 'N.N.'}</span>
+              </div>
 
-                <div class="text-center mb-2 -mt-[10px]">
-                  <span class="badge variant-filled-primary rounded">{movie.recommendedByFullName || 'N.N.'}</span>
+              <div class="text-center pb-2">                  
+                <div class="movie-title flex items-center justify-center align-middle min-h-16 overflow-hidden">
+                  <h3 class="text-center text-primary-500 font-semibold text-lg lg:text-xl leading-[1.5rem]">{movie.title}</h3>
                 </div>
-
-                <div class="text-center pb-2">                  
-                  <div class="movie-title flex items-center justify-center align-middle min-h-16 overflow-hidden">
-                    <h3 class="text-center text-primary-500 font-semibold text-lg lg:text-xl leading-[1.5rem]">{movie.title}</h3>
-                  </div>
-                  <p class="text-sm text-surface-300 text-center italic">
-                    Dir: {movie.director || 'Desconocido'}
-                  </p>
-                  <p class="text-md font-bold text-surface-300">
-                    ({(new Date(movie.release_date)).getFullYear() || 'Desconocido'})
-                  </p>
-                  <div class="flex flex-row justify-center items-center align-middle mt-2 mb-4">
-                    <span class="ml-1 text-xs text-surface-300 text-center">
-                      Agregada el: {new Date(movie.recommendedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  
+                <p class="text-sm text-surface-300 text-center italic">
+                  Dir: {movie.director || 'Desconocido'}
+                </p>
+                <p class="text-md font-bold text-surface-300">
+                  ({(new Date(movie.release_date)).getFullYear() || 'Desconocido'})
+                </p>
+                <div class="flex flex-row justify-center items-center align-middle mt-2 mb-4">
+                  <span class="ml-1 text-xs text-surface-300 text-center">
+                    Agregada el: {new Date(movie.recommendedAt).toLocaleDateString()}
+                  </span>
                 </div>
                 
-                <span class="mb-1 text-sm text-surface-300 font-semibold text-center">VOTOS:</span>
-
-                <div class="flex flex-row justify-between align-middle items-center">
-                  <button
-                    disabled={!movie.hasVoted}
-                    onclick={() => toggleVote(movie)}
-                    class="btn btn-vote-left w-[50px] h-[50px] variant-filled-primary text-primary-200 ml-2">
-                    <Minus strokeWidth={1.75} size={30} stroke="white"/>
-                  </button>
-                  <div class="flex flex-col votes_total bg-surface-500 w-full h-[50px] justify-center items-center">
-                    <!-- <span class="text-[12px]">VOTOS</span> -->
-                    <span class="text-2xl font-bold text-center">{movie.votes}</span>
-                  </div>
-                  <button
-                    disabled={movie.hasVoted}
-                    onclick={() => toggleVote(movie)}
-                    class="btn btn-vote-right w-[50px] h-[50px] variant-filled-primary text-primary-200 ml-2">
-                    <Plus strokeWidth={1.75} size={30} stroke="white"/>
-                  </button>
-                </div>                  
-
-                  <!-- TODO: Rediseñar de la siguiente forma -> dos botones con iconos de + y - para votar y un contador de votos al centro. Los botones se activan o desactivan según se haya votado previamente o no, o también un sólo botón como está actualmente que cambie según el estado.                                     -->
-                  <!-- <div class="flex flex-col justify-center relative group items-center">
-                    <span class="mr-1 text-sm text-surface-300">Votos:</span> 
-                    <span class="text-lg text-surface-300 font-bold group-hover:text-primary-500">{movie.votes}</span>
-                    <button
-                      onclick={() => toggleVote(movie)}
-                      class="btn btn-round w-[40px] h-[40px] variant-filled-primary text-primary-200 group"> -->
-                      <!-- <span class="flex group-hover:hidden">{movie.votes}</span> -->
-                      <!-- {#if movie.hasVoted}
-                        <Minus class="" strokeWidth={1.75} size={30} stroke="white"/>
-                      {:else}
-                        <Plus class="" strokeWidth={1.75} size={30} stroke="white"/>
-                      {/if}
-                    </button>
-                  </div> -->
-
-                  <!-- <button
-                    onclick={() => toggleVote(movie)}
-                    class="btn btn-round w-[40px] h-[40px] variant-filled-primary text-primary-200 group">
-                    <span class="flex group-hover:hidden">{movie.votes}</span>
-                    {#if movie.hasVoted}
-                      <Minus class="hidden group-hover:flex" strokeWidth={1.75} size={30} stroke="white"/>
-                    {:else}
-                      <Plus class="hidden group-hover:flex" strokeWidth={1.75} size={30} stroke="white"/>
-                    {/if}
-                  </button> -->
-
-
-
               </div>
               
-            </div>
-          {/each}
-        </div>
-      {/if}
+              <span class="mb-1 text-sm text-surface-300 font-semibold text-center">VOTOS:</span>
 
+              <div class="flex flex-row justify-between align-middle items-center">
+                <button
+                  disabled={!movie.hasVoted}
+                  onclick={() => toggleVote(movie)}
+                  class="btn btn-vote-left w-[50px] h-[50px] variant-filled-primary text-primary-200 ml-2">
+                  <Minus strokeWidth={1.75} size={30} stroke="white"/>
+                </button>
+                <div class="flex flex-col votes_total bg-surface-500 w-full h-[50px] justify-center items-center">
+                  <!-- <span class="text-[12px]">VOTOS</span> -->
+                  <span class="text-2xl font-bold text-center">{movie.votes}</span>
+                </div>
+                <button
+                  disabled={movie.hasVoted}
+                  onclick={() => toggleVote(movie)}
+                  class="btn btn-vote-right w-[50px] h-[50px] variant-filled-primary text-primary-200 ml-2">
+                  <Plus strokeWidth={1.75} size={30} stroke="white"/>
+                </button>
+              </div>                  
+            </div>              
+          </div>
+        {/each}
+      </div>
+    <!-- Si no está cargando y no hay películas, mostrar mensaje -->
     {:else}
-
       <p class="text-center text-surface-300 py-8">
-        Aún no hay películas recomendadas. ¡Sé el primero en añadir una!
+        No hay películas recomendadas. ¡Sé el primero en añadir una!
       </p>
-
     {/if}
-
   </div>
 </div>
 
