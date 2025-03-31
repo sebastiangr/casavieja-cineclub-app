@@ -50,16 +50,24 @@
     loading = true;
     
     const response = await fetch('/peliculas');
+    console.log('Movies response:', response);
     const newMovies = await response.json();
-      // Update hasVoted status for each movie
+    console.log('Movies JSONED:', newMovies);
+    // Update hasVoted status for each movie
+    console.time('CheckIfVoted Time');
     for (let movie of newMovies) {
       movie.hasVoted = await checkIfVoted(movie.id);
     }
+    console.timeEnd('CheckIfVoted Time');
+    console.log('Movies with hasVoted:', newMovies);
 
     // Update the store
     moviesStore.set(newMovies);
+    console.log('Movies Store:', moviesStore);
     checkMoviesLength = newMovies.length > 0;
+    console.log('More than one movie:', checkMoviesLength);
     loading = false;
+    console.log('Finished fetching movies');
     // movies = await response.json();
 
     // Verificar si el usuario ha votado en cada película
