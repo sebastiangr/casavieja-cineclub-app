@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { requestResetSchema } from '$lib/validations';
+  import { requestResetSchema, signupSchema } from '$lib/validations';
 	import { Eye, EyeOff } from 'lucide-svelte';
   import { z } from 'zod';
 
@@ -7,6 +7,142 @@
   let confirmPassword = $state('');
   let error = '';
   let success = '';
+  let showForm = $state(true);
+
+  interface FormData {
+    newPassword: string;
+    confirmPassword: string;
+  }
+  
+  let form = $state<FormData>({
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  let errors = $state<Partial<Record<keyof FormData, string>>>({});
+  let loading = $state(false);
+
+  function validateForm() {
+    errors = {};
+    try {
+      // Validar con Zod
+      signupSchema.parse(form);
+      return true;
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        err.errors.forEach(e => {
+          const path = e.path[0] as keyof FormData;
+          errors[path] = e.message;
+        });
+      }
+      return false;
+    }
+  }    
+
+  async function handleSubmit() {
+    console.log('handleSubmit called');
+    loading = true;
+
+    // Validar el formulario
+    // if (!validateForm()) {      
+    //   loading = false;
+    //   console.log('Form validation failed:', errors);
+    //   return;
+    // }
+
+    // Validar que las contraseñas coincidan
+    if (form.newPassword !== form.confirmPassword) {
+      errors.confirmPassword = 'Las contraseñas no coinciden';
+      loading = false;
+      return;
+    }
+
+    // Validar la longitud de la contraseña
+    if (form.newPassword.length < 8 || form.confirmPassword.length < 8) {
+      errors.newPassword = 'La contraseña debe tener al menos 8 caracteres';      
+      loading = false;
+      return;
+    }
+
+    try {
+      // Enviar solicitud para cambiar la contraseña
+      const token = window.location.search.split('token=')[1];
+      const response = await fetch('/auth/reset-password/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token, newPassword: form.newPassword, confirmPassword: form.confirmPassword })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Mostrar mensaje de éxito y ocultar formulario
+        success = 'La contraseña se ha cambiado con éxito';
+        loading = false;
+        // Ocultar formulario
+        showForm = false;
+      } else {
+        error = data.error || 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
+        loading = false;
+      }
+    } catch (err) {
+      console.log('Error:', err);
+      error = 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
+      loading = false;
+    }
+    // try {
+    //   console.log('Validating new password and confirm password');
+    //   const validation = z.object({
+    //     newPassword: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
+    //     confirmPassword: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres')
+    //   }).safeParse({ newPassword, confirmPassword });
+
+    //   console.log('Validation result:', validation);
+
+    //   if (!validation.success) {
+    //     console.log('Validation failed:', validation.error);
+    //     error = 'La contraseña y la confirmación no coinciden';
+    //     return;
+    //   }
+
+    //   console.log('Validation passed');
+
+    //   console.log('Getting token from URL');
+    //   const token = window.location.search.split('token=')[1];
+    //   console.log('Token:', token);
+    //   if (!token) {
+    //     console.error('Token no encontrado en la URL');
+    //     return;
+    //   }
+
+    //   console.log('Sending request to update password');
+    //   const response = await fetch('/auth/reset-password/reset', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ token, newPassword, confirmPassword })
+    //   });
+
+    //   console.log('Response:', response);
+
+    //   const data = await response.json();
+    //   console.log('Data:', data);
+
+    //   if (response.ok) {
+    //     console.log('Password updated successfully');
+    //     success = 'Contraseña actualizada con éxito';
+    //   } else {
+    //     console.log('Error updating password:', data.error);
+    //     error = data.error || 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
+    //   }
+    // } catch (err) {
+    //   console.log('Error:', err);
+    //   error = 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
+    // }
+  }
 
   // SHOW/HIDE PASSWORD
   let showPassword = $state(false);
@@ -37,61 +173,6 @@
         showConfirmPassword = false;
         timeoutIdConfirmPassword = null;
       }, 2000);
-    }
-  }
-
-  async function handleSubmit() {
-    console.log('handleSubmit called');
-
-    try {
-      console.log('Validating new password and confirm password');
-      const validation = z.object({
-        newPassword: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
-        confirmPassword: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres')
-      }).safeParse({ newPassword, confirmPassword });
-
-      console.log('Validation result:', validation);
-
-      if (!validation.success) {
-        console.log('Validation failed:', validation.error);
-        error = 'La contraseña y la confirmación no coinciden';
-        return;
-      }
-
-      console.log('Validation passed');
-
-      console.log('Getting token from URL');
-      const token = window.location.search.split('token=')[1];
-      console.log('Token:', token);
-      if (!token) {
-        console.error('Token no encontrado en la URL');
-        return;
-      }
-
-      console.log('Sending request to update password');
-      const response = await fetch('/auth/reset-password/reset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ token, newPassword, confirmPassword })
-      });
-
-      console.log('Response:', response);
-
-      const data = await response.json();
-      console.log('Data:', data);
-
-      if (response.ok) {
-        console.log('Password updated successfully');
-        success = 'Contraseña actualizada con éxito';
-      } else {
-        console.log('Error updating password:', data.error);
-        error = data.error || 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
-      }
-    } catch (err) {
-      console.log('Error:', err);
-      error = 'Ha ocurrido un error. Por favor, inténtalo de nuevo.';
     }
   }
 </script>
@@ -126,6 +207,9 @@
         {/if}
       </button>
     </div>
+    {#if errors.newPassword}
+      <p class="text-red-500 text-sm">{errors.newPassword}</p>
+    {/if}
 
     <div class="relative">
       <input
@@ -147,22 +231,9 @@
         {/if}
       </button>
     </div>    
-
-    <div class="form-control">
-      <!-- <label for="newPassword" class="label">
-        <span class="label-text">Nueva contraseña</span>
-      </label> -->
-      <!-- <input 
-        type="password" 
-        id="newPassword" bind:value={newPassword} class="input input-bordered w-full" /> -->
-    </div>
-
-    <div class="form-control">
-      <!-- <label for="confirmPassword" class="label">
-        <span class="label-text">Confirmar contraseña</span>
-      </label> -->
-      <!-- <input type="password" id="confirmPassword" bind:value={confirmPassword} class="input input-bordered w-full" /> -->
-    </div>
+    {#if errors.confirmPassword}
+      <p class="text-red-500 text-sm">{errors.confirmPassword}</p>
+    {/if}
 
     <button 
       type="submit" 

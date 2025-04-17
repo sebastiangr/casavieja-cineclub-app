@@ -4,19 +4,12 @@ import nodemailer from 'nodemailer';
 
 // Configure your email transport
 const transporter = nodemailer.createTransport({
-  // host: import.meta.env.VITE_EMAIL_HOST || 'smtp.example.com',
-  // pool: true,
-  host: 'smtp.gmail.com',
-  // port: parseInt(import.meta.env.VITE_EMAIL_PORT || '587'),
-  port: 465,
-  // secure: import.meta.env.VITE_EMAIL_SECURE === 'true',
-  // secure: false, // or 'STARTTLS'
-  secure: true,
+  host: import.meta.env.VITE_EMAIL_HOST || 'smtp.example.com',  
+  port: parseInt(import.meta.env.VITE_EMAIL_PORT || '465'),  
+  secure: import.meta.env.VITE_EMAIL_SECURE === 'true',    
   auth: {
-    // user: import.meta.env.VITE_EMAIL_USER,
-    // pass: import.meta.env.VITE_EMAIL_PASSWORD
-    user: 'sebastiangr@gmail.com',
-    pass: 'kjar egka dwal libr',
+    user: import.meta.env.VITE_EMAIL_USER,
+    pass: import.meta.env.VITE_EMAIL_PASSWORD
   }
 });
 
