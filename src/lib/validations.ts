@@ -14,7 +14,40 @@ export const signupSchema = z.object({
 
 export type SignupForm = z.infer<typeof signupSchema>;
 
+// Schema for requesting a password reset
+export const requestResetSchema = z.object({
+  email: z.string().email('Por favor ingresa un email válido')
+});
+
+export type RequestResetForm = z.infer<typeof requestResetSchema>;
+
+// Schema for resetting the password
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, 'Token inválido'),
+  password: z.string()
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .regex(/[A-Z]/, 'La contraseña debe contener al menos una letra mayúscula')
+    .regex(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
+    .regex(/[0-9]/, 'La contraseña debe contener al menos un número'),
+  confirmPassword: z.string()
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Las contraseñas no coinciden',
+  path: ['confirmPassword']
+});
+
+export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
+
 // Agregar una función de validación reutilizable
 export function validateSignup(data: unknown) {
   return signupSchema.safeParse(data);
+}
+
+// Función para validar solicitud de restablecimiento de contraseña
+export function validateRequestReset(data: unknown) {
+  return requestResetSchema.safeParse(data);
+}
+
+// Función para validar el restablecimiento de contraseña
+export function validateResetPassword(data: unknown) {
+  return resetPasswordSchema.safeParse(data);
 }

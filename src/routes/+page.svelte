@@ -158,5 +158,6 @@
   <hr class="w-full border border-gray-300 my-2">
 
   <hr>
+  <p> <a href="/auth/reset-password" class="text-primary-500 hover:text-primary-400">Restablecer contraseña</a></p>
 	<p>¿No tienes cuenta? <a href="/signup" class="text-primary-500 hover:text-primary-400">Regístrate</a></p>
 </div>

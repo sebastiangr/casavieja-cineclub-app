@@ -38,3 +38,17 @@ export const GET: RequestHandler = async ({ locals }) => {
     );
   }
 };
+
+
+// Este endpoint hace lo siguiente:
+
+// Verifica si el usuario está autenticado
+// Obtiene el ID del usuario desde locals.user
+// Consulta la base de datos para encontrar todos los votos del usuario actual
+// Extrae solo los IDs de las películas votadas
+// Devuelve estos IDs como un array en formato JSON
+// La respuesta tendrá este formato:
+// {
+//   "votedMovieIds": ["movie-id-1", "movie-id-2", "movie-id-3"]
+// }
+// Este endpoint es mucho más eficiente que hacer consultas individuales para cada película, ya que realiza una sola consulta a la base de datos para obtener todos los votos del usuario.
