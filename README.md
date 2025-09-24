@@ -15,7 +15,7 @@ The application features user authentication, movie browsing, and messaging func
 To get started with the project, clone the repository and install the dependencies:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sebastiangr/casavieja-cineclub-app
 cd casavieja-cineclub-app
 npm install
 ```
